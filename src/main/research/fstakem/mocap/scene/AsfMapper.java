@@ -23,39 +23,9 @@ public class AsfMapper
 	{
 		logger.debug("AsfMapper.createCharacterElementHierarchy(): Entering method.");
 		
-		HashMap<String, ArrayList<String>> hierarchy_copy =  (HashMap<String, ArrayList<String>>) hierarchy.clone();
+		logger.info("AsfMapper.createCharacterElementHierarchy(): Creating root element.");
 		RootElement root = new RootElement();
-		ArrayList<CharacterElement> leaf_bones = new ArrayList<CharacterElement>();
-		ArrayList<String> leaf_bone_names = hierarchy_copy.remove(AsfParser.ROOT_KEYWORD);
-		for(String leaf_bone_name : leaf_bone_names)
-			leaf_bones.add( new Bone(leaf_bone_name) );
-		root.setChildren(leaf_bones);
-		
-		while(!hierarchy_copy.isEmpty())
-		{
-			ArrayList<String> remove_from_hierarchy = new ArrayList<String>();
-			for(Map.Entry<String, ArrayList<String>> entry : hierarchy.entrySet())
-			{
-				String trunk_bone_name = entry.getKey();
-				CharacterElement element = root.findCharacterElement(trunk_bone_name);
-				
-				if(element != null)
-				{
-					remove_from_hierarchy.add(trunk_bone_name);
-					leaf_bone_names = entry.getValue();
-					leaf_bones = new ArrayList<CharacterElement>();
-					for(String leaf_bone_name : leaf_bone_names)
-					{
-						logger.info("AsfMapper.createCharacterElementHierarchy(): Adding {} to {} in the hierarchy.", leaf_bone_name, element.getName());
-						leaf_bones.add( new Bone(leaf_bone_name) );
-					}
-					element.setChildren(leaf_bones);
-				}	
-			}
-			
-			for(String bone_name : remove_from_hierarchy)
-				hierarchy_copy.remove(bone_name);
-		}
+		root.setChildren( AsfMapper.createChildBones(root, hierarchy) );
 		
 		logger.debug("AsfMapper.createCharacterElementHierarchy(): Exiting method.");
 		return root;
@@ -131,6 +101,31 @@ public class AsfMapper
 		}
 		
 		logger.debug("AsfMapper.addDetailsToBones(): Exiting method.");
+	}
+	
+	private static ArrayList<CharacterElement> createChildBones(CharacterElement parent, HashMap<String, ArrayList<String>> hierarchy)
+	{
+		logger.debug("AsfMapper.createChildBones(): Entering recursive method with parent => \'{}\'.", parent.getName());
+		
+		ArrayList<CharacterElement> child_bones = new ArrayList<CharacterElement>();
+		ArrayList<String> child_names_of_bones = hierarchy.get(parent.getName());
+		
+		if(child_names_of_bones != null)
+		{
+			for(String bone_name : child_names_of_bones)
+			{
+				logger.info("AsfMapper.createChildBones(): Creating bone \'{}\' connected to parent \'{}\' in the hierarchy.", bone_name, parent.getName());
+				Bone bone = new Bone(bone_name);
+				ArrayList<CharacterElement> children = AsfMapper.createChildBones(bone, hierarchy);
+				
+				if(children.size() > 0)
+					bone.addChildren(children);
+				child_bones.add(bone);
+			}
+		}
+		
+		logger.debug("AsfMapper.createChildBones(): Exiting recursive method with parent => \'{}\'.", parent.getName());
+		return child_bones;
 	}
 	
 	private static ArrayList<CharacterElement.Dof> getRootOrder(ArrayList<String> values)

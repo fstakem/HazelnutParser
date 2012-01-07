@@ -91,16 +91,20 @@ public class AsfMapperTest extends MapperTest
 			Assert.fail(e.getMessage());
 		}
 		
-    	ArrayList<CharacterElement> all_elements = root.getAllSubElements();
+		ArrayList<CharacterElement> all_elements = new ArrayList<CharacterElement>();
+		all_elements.add(root);
+		all_elements.addAll(root.getAllSubElements());
     	for(CharacterElement element : all_elements)
     	{
-    		System.out.println(element.getName());
-    		ArrayList<String> children_names = hierarchy.get(element);
+    		ArrayList<String> children_names = hierarchy.get(element.getName());
     		if(children_names != null)
     		{
     			ArrayList<CharacterElement> children = element.getChildren();
     			for(CharacterElement child_element : children)
+    			{
+    				logger.info("Testing that \'{}\' has child \'{}\'.", element.getName(), child_element.getName());
     				Assert.assertTrue("Character element hierachy created does not match initial hierachy.", children_names.contains(child_element.getName()));
+    			}
     		}
     	}
     }

@@ -187,6 +187,20 @@ public class CharacterElement
 			throw new IllegalArgumentException("The child nodes cannot be set to null.");
 	}
 	
+	public void addChildren(ArrayList<CharacterElement> children)
+	{
+		if(children != null)
+		{
+			for(CharacterElement child : children)
+			{
+				child.parent = this;
+				this.children.add(child);
+			}
+		}	
+		else
+			throw new IllegalArgumentException("The child nodes cannot be set to null.");
+	}
+	
 	public void addChild(CharacterElement child)
 	{
 		if(child != null)

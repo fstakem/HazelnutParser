@@ -19,6 +19,8 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import test.research.fstakem.mocap.integration.AcclaimFileImporterTest;
+
 public class AcclaimCharacterGeneratorTest 
 {
 	// Logger
@@ -83,6 +85,7 @@ public class AcclaimCharacterGeneratorTest
     	
     	try 
     	{
+    		logger.info("Testing that the character \'{}\' can be created.", name);
     		character = AcclaimCharacterGenerator.createCharacterFromData(name, asf_data, amc_data);
 		} 
     	catch (Exception e) 

@@ -91,6 +91,7 @@ public class AmcParserTest
     	ArrayList<AcclaimFrame> frames = null;
     	try 
     	{
+    		logger.info("Parsing amc frames.");
 			frames = AmcParser.parseFrames(this.frames);
 		} 
     	catch (ParseException e) 
@@ -101,6 +102,8 @@ public class AmcParserTest
     	for(int i= 0; i < frames.size(); i++)
     	{
     		AcclaimFrame frame = frames.get(i);
+    		logger.info("Testing frame {} to make sure it was properly parsed.", frame.number);
+    		
     		if(frame.number != this.frame_numbers[i])
     			Assert.fail("Parsed frame number does match initial frame number.");
     		

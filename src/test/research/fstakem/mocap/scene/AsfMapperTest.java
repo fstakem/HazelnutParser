@@ -129,10 +129,12 @@ public class AsfMapperTest extends MapperTest
 		}
     	
     	// Test name
+		logger.info("Testing the root element.");
     	Assert.assertEquals("Root element name created does not match initial name.", 
     						MapperTest.asf_root_name, root.getName());
     	
     	// Test dof
+    	logger.info("Testing the root element dof.");
     	ArrayList<Dof> order = root.getOrder();
     	for(int i = 0; i < order.size(); i++)
     		Assert.assertEquals("Root element dof created does not match initial dof.", 
@@ -140,6 +142,7 @@ public class AsfMapperTest extends MapperTest
     							order.get(i));
     	
     	// Test axis
+    	logger.info("Testing the root element axis.");
     	ArrayList<Axis> axis = root.getAxis();
     	for(int i = 0; i < axis.size(); i++)
     		Assert.assertEquals("Root element axis dof created does not match initial axis.", 
@@ -147,6 +150,7 @@ public class AsfMapperTest extends MapperTest
     							axis.get(i));
 
     	// Test position
+    	logger.info("Testing the root element position.");
     	Vector3f position = root.getPosition();
     	Assert.assertEquals("Root element position created does not match initial position.", 
     						Float.valueOf(MapperTest.asf_root_position[0]), 
@@ -159,6 +163,7 @@ public class AsfMapperTest extends MapperTest
     						position.z);
     	
     	// Test orientation
+    	logger.info("Testing the root element orientation.");
     	Vector3f orientation = root.getOrientation();
     	Assert.assertEquals("Root element orientation created does not match initial orientation.", 
     						Float.valueOf(MapperTest.asf_root_orientation[0]), 
@@ -206,6 +211,7 @@ public class AsfMapperTest extends MapperTest
     			}
     		}
     		
+    		logger.info("Testing the bone \'{}\'.", bones.get(bone_index));
     		if(bone_index != -1)
     			this.compareBoneValues(acclaim_bone, (Bone) bones.get(bone_index));
     		else

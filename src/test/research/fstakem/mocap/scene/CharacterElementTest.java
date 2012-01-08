@@ -91,6 +91,7 @@ public class CharacterElementTest
     		Dof d = null;
     		try 
     		{
+    			logger.info("Testing the \'{}\' dof element.", i+1);
 				d = CharacterElement.getDofValueFromString(dof_strings[i]);
 			} 
     		catch (Exception e) 
@@ -116,6 +117,7 @@ public class CharacterElementTest
     		Axis a = null;
     		try 
     		{
+    			logger.info("Testing the \'{}\' axis element.", i+1);
 				a = CharacterElement.getAxisValueFromString(axis_strings[i]);
 			} 
     		catch (Exception e) 
@@ -133,11 +135,13 @@ public class CharacterElementTest
     {
     	logger.debug("Test to make sure the state is properly set and retreived.");
     	
+    	logger.info("Creating different character element states.");
     	CharacterElementState state_a = this.createState(1);
     	CharacterElementState state_b = this.createState(2);
     	CharacterElementState state_c = this.createState(3);
     	CharacterElementState state_d = this.createState(4);
     	
+    	logger.info("Adding the new states to the character element.");
     	ArrayList<CharacterElementState> states = new ArrayList<CharacterElementState>();
     	states.add(state_a);
     	states.add(state_b);
@@ -145,11 +149,13 @@ public class CharacterElementTest
     	this.character_element.addState(state_c);
     	this.character_element.addStateAt(1, state_d);
     	
+    	logger.info("Restting the current state and testing.");
     	this.character_element.resetCurrentState();
     	CharacterElementState state = this.character_element.getCurrentState();
 		this.compareStates(state, state_a);
 		this.character_element.incrementState();
 		
+		logger.info("Incrementing and decrementing the current state and testing.");
 		state = this.character_element.getCurrentState();
 		this.compareStates(state, state_d);
 		this.character_element.incrementState();
@@ -160,6 +166,7 @@ public class CharacterElementTest
 		this.compareStates(state, state_b);
 		this.character_element.setCurrentState(this.character_element.getNumberOfStates()-1);
 		
+		logger.info("Setting the current state and testing.");
 		state = this.character_element.getCurrentState();
 		this.compareStates(state, state_c);
     }
@@ -169,6 +176,7 @@ public class CharacterElementTest
     {
     	logger.debug("Test to make sure the child elements are properly set and retreived.");
     	
+    	logger.info("Creating nested elements.");
     	String[] nested_names = { "A", "B" };
     	ArrayList<CharacterElement> nested_elements = new ArrayList<CharacterElement>();
     	nested_elements.add(this.createNestedCharacterElements(nested_names));
@@ -176,6 +184,7 @@ public class CharacterElementTest
     	Assert.assertTrue("The child nodes are not recognized.", this.character_element.hasChildren());
     	Assert.assertEquals("The number of child nodes stated does not match the actual number.", 1, this.character_element.getNumberOfChildren());
     	
+    	logger.info("Testing the child elements to make sure they have the proper nesting.");
     	ArrayList<CharacterElement> character_elements = this.character_element.getChildren();
     	CharacterElement child = character_elements.get(0);
     	if(!child.getName().equals(nested_names[0]))
@@ -196,7 +205,10 @@ public class CharacterElementTest
     	ArrayList<CharacterElement> nested_elements = this.character_element.getAllSubElements();
     	
     	for(CharacterElement element : elements)
+    	{
+    		logger.info("Testing character element \'{}\' to make sure is was returned.", element.getName());
     		Assert.assertTrue("Could not find a nested character element.", nested_elements.contains(element));
+    	}
     }
     
     @Test
@@ -209,6 +221,7 @@ public class CharacterElementTest
     	
     	for(int i = 0; i < nested_names.length; i++)
     	{
+    		logger.info("Testing character element \'{}\' to make sure is was found.", nested_names[i]);
     		CharacterElement element = this.character_element.findCharacterElement(nested_names[i]);
     		if(element == null)
     			Assert.fail("Could not find a nested character element.");

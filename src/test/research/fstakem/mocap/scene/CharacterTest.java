@@ -81,7 +81,10 @@ public class CharacterTest
     	ArrayList<CharacterElement> nested_elements = character.getAllCharacterElements();
     
     	for(CharacterElement element : elements)
+    	{
+    		logger.info("Testing character element \'{}\' to make sure is was returned.", element.getName());
     		Assert.assertTrue("Could not find a nested character element.", nested_elements.contains(element));
+    	}
     }
     
     public static CharacterElement createNestedCharacterElements(String[] names)

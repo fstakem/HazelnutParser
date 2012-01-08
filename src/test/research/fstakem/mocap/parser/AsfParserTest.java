@@ -99,6 +99,7 @@ public class AsfParserTest
     	
     	for(String keyword : AsfParserTest.section_keywords)
     	{
+    		logger.info("Testing section \'{}\' to make sure it was properly seperated.");
     		if(!this.sections.containsKey(keyword))
     			Assert.fail("Section: " + keyword + " not found.");
     	}
@@ -113,6 +114,7 @@ public class AsfParserTest
     	try 
     	{
 			version = AsfParser.parseVersion(this.sections);
+			logger.info("Testing \'{}\' to make sure it was properly parsed.", version);
 			if(!AsfParserTest.version.equals(version))
 				Assert.fail("Parsed version does match initial version.");
 		} 
@@ -131,6 +133,7 @@ public class AsfParserTest
     	try 
     	{
 			name = AsfParser.parseName(this.sections);
+			logger.info("Testing \'{}\' to make sure it was properly parsed.", name);
 			if(!AsfParserTest.name.equals(name))
 				Assert.fail("Parsed name does match initial name.");
 		} 
@@ -157,6 +160,7 @@ public class AsfParserTest
     	
     	for(Map.Entry<String, String> entry : units.entrySet())
 		{
+    		logger.info("Testing \'{}\' to make sure it was properly parsed.", entry.getValue());
 			boolean mapContainsValue = false;
 			if(entry.getValue().equals(AsfParserTest.unit_mass) ||
 			   entry.getValue().equals(AsfParserTest.unit_length) ||
@@ -185,6 +189,7 @@ public class AsfParserTest
     	
        	for(Map.Entry<String, ArrayList<String>> entry : root.entrySet())
 		{
+       		logger.info("Testing \'{}\' to make sure it was properly parsed.", entry.getValue());
 			boolean mapContainsValue = false;
 			String line = "";
 			ArrayList<String> values = entry.getValue();
@@ -214,6 +219,7 @@ public class AsfParserTest
        	for(int i = 0; i < bones.size(); i++)
     	{
     		AcclaimBone bone = bones.get(i);
+    		logger.info("Testing \'{}\' to make sure it was properly parsed.", bone.name);
     		this.compareBonesName(bone.name, AsfParserTest.bone_names[i]);
     		this.compareBonesDirection(bone.direction, AsfParserTest.bone_direction);
     		this.compareBonesLength(bone.length, AsfParserTest.bone_length);
@@ -240,6 +246,7 @@ public class AsfParserTest
     	
     	for(Map.Entry<String, ArrayList<String>> entry : hierarchy.entrySet())
 		{
+    		logger.info("Testing \'{}\' to make sure it was properly parsed.", entry.getValue());
     		this.compareBoneHierarchy(entry.getKey());
     		ArrayList<String> values = entry.getValue();
     		for(String value : values)

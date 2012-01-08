@@ -14,6 +14,8 @@ import org.junit.rules.TestWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import test.research.fstakem.mocap.integration.AcclaimFileImporterTest;
+
 public class AcclaimImporterTest 
 {
 	// Logger
@@ -76,6 +78,7 @@ public class AcclaimImporterTest
     	
     	try 
     	{
+    		logger.info("Test to make sure the asf data can be properly parsed.");
 			asf_data = AcclaimImporter.parseAsfData(raw_lines);
 		} 
     	catch (ParseException e) 
@@ -95,6 +98,7 @@ public class AcclaimImporterTest
 		
 		try 
 		{
+			logger.info("Test to make sure the amc data can be properly parsed.");
 			amc_data = AcclaimImporter.parseAmcData(raw_lines);
 		} 
 		catch (ParseException e) 

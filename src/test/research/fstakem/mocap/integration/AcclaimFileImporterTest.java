@@ -83,6 +83,7 @@ public class AcclaimFileImporterTest
     	
     	try 
     	{
+    		logger.info("Testing that asf file \'{}\' can be parsed.", AcclaimFileImporterTest.ASF_FILE_PATH);
     		ArrayList<String> raw_lines = this.importFile(AcclaimFileImporterTest.ASF_FILE_PATH);
     		AsfData asf_data = AcclaimImporter.parseAsfData(raw_lines);
 		} 
@@ -107,6 +108,7 @@ public class AcclaimFileImporterTest
     	
 		try 
 		{
+			logger.info("Testing that amc file \'{}\' can be parsed.", AcclaimFileImporterTest.AMC_FILE_PATH);
 			ArrayList<String> raw_lines = this.importFile(AcclaimFileImporterTest.AMC_FILE_PATH);
 			AmcData amc_data = AcclaimImporter.parseAmcData(raw_lines);
 		} 

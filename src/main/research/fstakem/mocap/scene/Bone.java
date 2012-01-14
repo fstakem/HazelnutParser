@@ -16,6 +16,9 @@ public class Bone extends CharacterElement
 	private ArrayList<Dof> dof;
 	private ArrayList<ArrayList<Float>> limits;
 	
+	// Graphics
+	protected GraphicsObject graphics_object;
+	
 	public Bone()
 	{
 		this.setId(1);
@@ -32,6 +35,7 @@ public class Bone extends CharacterElement
 		limits.add(y_limits);
 		limits.add(z_limits);
 		this.setLimits(limits);
+		this.setGraphicsObject(null);
 	}
 	
 	public Bone(String name)
@@ -116,5 +120,15 @@ public class Bone extends CharacterElement
 			this.limits = limits;
 		else
 			throw new IllegalArgumentException("The limits cannot be set to null.");
+	}
+	
+	public GraphicsObject getGraphicsObject()
+	{
+		return this.graphics_object;
+	}
+	
+	public void setGraphicsObject(GraphicsObject graphics_object)
+	{
+		this.graphics_object = graphics_object;
 	}
 }

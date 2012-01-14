@@ -9,7 +9,6 @@ import main.research.fstakem.mocap.parser.AcclaimBone;
 import main.research.fstakem.mocap.parser.AmcData;
 import main.research.fstakem.mocap.scene.AmcMapper;
 import main.research.fstakem.mocap.scene.AsfMapper;
-import main.research.fstakem.mocap.scene.Bone;
 import main.research.fstakem.mocap.scene.CharacterElement;
 import main.research.fstakem.mocap.scene.RootElement;
 

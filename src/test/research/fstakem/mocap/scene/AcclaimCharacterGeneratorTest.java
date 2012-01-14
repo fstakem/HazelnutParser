@@ -15,11 +15,8 @@ import org.junit.Test;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import test.research.fstakem.mocap.integration.AcclaimFileImporterTest;
 
 public class AcclaimCharacterGeneratorTest 
 {

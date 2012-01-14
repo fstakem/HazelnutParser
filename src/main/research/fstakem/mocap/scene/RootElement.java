@@ -16,8 +16,6 @@ public class RootElement extends CharacterElement
 	// Root characteristics
 	private ArrayList<Dof> order;
 	private ArrayList<Axis> axis;
-	private Vector3f position;
-	private Vector3f orientation;
 	
 	public RootElement()
 	{
@@ -60,31 +58,5 @@ public class RootElement extends CharacterElement
 			this.axis = axis;
 		else
 			throw new IllegalArgumentException("The axis cannot be set to null.");
-	}
-	
-	public Vector3f getPosition()
-	{
-		return this.position;
-	}
-	
-	public void setPosition(Vector3f position)
-	{
-		if(position != null)
-			this.position = position;
-		else
-			throw new IllegalArgumentException("The position cannot be set to null.");
-	}
-	
-	public Vector3f getOrientation()
-	{
-		return this.orientation;
-	}
-	
-	public void setOrientation(Vector3f orientation)
-	{
-		if(orientation != null)
-			this.orientation = orientation;
-		else
-			throw new IllegalArgumentException("The orientation cannot be set to null.");
 	}
 }

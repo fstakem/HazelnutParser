@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Character 
 {
 	private String name;
-	protected CharacterElement root;
+	private CharacterElement root;
 	
 	public Character()
 	{

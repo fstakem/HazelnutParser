@@ -3,14 +3,10 @@ package main.research.fstakem.mocap.scene;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.vecmath.Vector3f;
-
-
 public class Bone extends CharacterElement
 {
 	// Bone characteristics
 	private int id;
-	private Vector3f orientation;
 	private float length;
 	private ArrayList<Float> axis;
 	private ArrayList<Dof> dof;
@@ -56,20 +52,7 @@ public class Bone extends CharacterElement
 		else
 			throw new IllegalArgumentException("The id cannot be negative.");
 	}
-	
-	public Vector3f getOrientation()
-	{
-		return this.orientation;
-	}
-	
-	public void setOrientation(Vector3f orientation)
-	{
-		if(orientation != null)
-			this.orientation = orientation;
-		else
-			throw new IllegalArgumentException("The orientation cannot be set to null.");
-	}
-	
+		
 	public float getLength()
 	{
 		return this.length;

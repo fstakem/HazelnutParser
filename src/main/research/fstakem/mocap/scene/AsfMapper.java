@@ -18,7 +18,6 @@ public class AsfMapper
 	// Logger
 	private static final Logger logger = LoggerFactory.getLogger(AsfMapper.class);
 		
-	@SuppressWarnings("unchecked")
 	public static RootElement createCharacterElementHierarchy(HashMap<String, ArrayList<String>> hierarchy) throws Exception
 	{
 		logger.debug("AsfMapper.createCharacterElementHierarchy(): Entering method.");

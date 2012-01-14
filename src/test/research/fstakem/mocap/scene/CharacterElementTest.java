@@ -18,8 +18,6 @@ import org.junit.Test;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import test.research.fstakem.mocap.parser.AcclaimImporterTest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

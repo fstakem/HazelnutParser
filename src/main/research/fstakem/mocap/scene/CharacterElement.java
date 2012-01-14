@@ -2,9 +2,14 @@ package main.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Vector3f;
 
 public class CharacterElement 
 {
+	// State
+	private Vector3f position;
+	private Vector3f orientation;
+	
 	// Unique types
 	public enum Dof { TX, TY, TZ, RX, RY, RZ }
 	public enum Axis { X, Y, Z };
@@ -29,6 +34,32 @@ public class CharacterElement
 		this.setChildren(new ArrayList<CharacterElement>());
 		this.setStates(new ArrayList<CharacterElementState>());
 		this.current_state = 0;
+	}
+	
+	public Vector3f getPosition()
+	{
+		return this.position;
+	}
+	
+	public void setPosition(Vector3f position)
+	{
+		if(position != null)
+			this.position = position;
+		else
+			throw new IllegalArgumentException("The position cannot be set to null.");
+	}
+	
+	public Vector3f getOrientation()
+	{
+		return this.orientation;
+	}
+	
+	public void setOrientation(Vector3f orientation)
+	{
+		if(orientation != null)
+			this.orientation = orientation;
+		else
+			throw new IllegalArgumentException("The orientation cannot be set to null.");
 	}
 	
 	public static Dof getDofValueFromString(String value)

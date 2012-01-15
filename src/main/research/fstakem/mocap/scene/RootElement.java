@@ -15,6 +15,7 @@ public class RootElement extends CharacterElement
 	
 	// Root characteristics
 	private ArrayList<Dof> order;
+	// TODO => change axis to an enum of XYZ, YXZ, etc; test as well
 	private ArrayList<Axis> axis;
 	
 	public RootElement()
@@ -24,8 +25,6 @@ public class RootElement extends CharacterElement
 		this.setOrder(order);
 		ArrayList<Axis> axis = new ArrayList<Axis>(Arrays.asList(Axis.X, Axis.Y, Axis.Z));
 		this.setAxis(axis);
-		this.setPosition(new Vector3f());
-		this.setOrientation(new Vector3f());
 	}
 	
 	public RootElement(ArrayList<CharacterElement> bones)

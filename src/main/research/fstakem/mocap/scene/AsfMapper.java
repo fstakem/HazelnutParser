@@ -49,7 +49,7 @@ public class AsfMapper
 			else if(label.equals(AsfParser.BONE_POSITION_LABEL))
 			{
 				float[] out = stringToFloatArray(values);
-				root.setPosition(new Vector3f(out[0], out[1], out[2]));
+				root.setStartPosition(new Vector3f(out[0], out[1], out[2]));
 			}
 			else if(label.equals(AsfParser.BONE_ORIENTATION_LABEL))
 			{

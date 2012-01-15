@@ -7,7 +7,7 @@ import javax.vecmath.Vector3f;
 public class CharacterElement 
 {
 	// State
-	private Vector3f position;
+	private Vector3f start_position;
 	private Vector3f orientation;
 	
 	// Unique types
@@ -34,21 +34,33 @@ public class CharacterElement
 		this.setChildren(new ArrayList<CharacterElement>());
 		this.setStates(new ArrayList<CharacterElementState>());
 		this.current_state = 0;
+		this.setStartPosition(new Vector3f());
+		this.setOrientation(new Vector3f());
 	}
 	
-	public Vector3f getPosition()
+	public Vector3f getStartPosition()
 	{
-		return this.position;
+		return this.start_position;
 	}
 	
-	public void setPosition(Vector3f position)
+	public void setStartPosition(Vector3f position)
 	{
 		if(position != null)
-			this.position = position;
+			this.start_position = position;
 		else
 			throw new IllegalArgumentException("The position cannot be set to null.");
 	}
 	
+	public Vector3f getEndPosition()
+	{
+		return this.start_position;
+	}
+	
+	public Vector3f getGlobalOrientation()
+	{
+		return new Vector3f(this.orientation);
+	}
+				
 	public Vector3f getOrientation()
 	{
 		return this.orientation;

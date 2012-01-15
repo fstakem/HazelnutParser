@@ -151,7 +151,7 @@ public class AsfMapperTest extends MapperTest
 
     	// Test position
     	logger.info("Testing the root element position.");
-    	Vector3f position = root.getPosition();
+    	Vector3f position = root.getStartPosition();
     	Assert.assertEquals("Root element position created does not match initial position.", 
     						Float.valueOf(MapperTest.asf_root_position[0]), 
     						position.x);
@@ -211,7 +211,7 @@ public class AsfMapperTest extends MapperTest
     			}
     		}
     		
-    		logger.info("Testing the bone \'{}\'.", bones.get(bone_index));
+    		logger.info("Testing the bone \'{}\'.", bones.get(bone_index).getName());
     		if(bone_index != -1)
     			this.compareBoneValues(acclaim_bone, (Bone) bones.get(bone_index));
     		else

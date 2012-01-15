@@ -49,4 +49,9 @@ public class Character
 	{
 		this.name = name;
 	}
+	
+	public void calculatePositionOfElements()
+	{
+		
+	}
 }

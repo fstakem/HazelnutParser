@@ -3,6 +3,8 @@ package main.research.fstakem.mocap.scene;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.vecmath.Vector3f;
+
 public class Bone extends CharacterElement
 {
 	// Bone characteristics
@@ -11,10 +13,7 @@ public class Bone extends CharacterElement
 	private ArrayList<Float> axis;
 	private ArrayList<Dof> dof;
 	private ArrayList<ArrayList<Float>> limits;
-	
-	// Graphics
-	protected GraphicsObject graphics_object;
-	
+		
 	public Bone()
 	{
 		this.setId(1);
@@ -31,7 +30,6 @@ public class Bone extends CharacterElement
 		limits.add(y_limits);
 		limits.add(z_limits);
 		this.setLimits(limits);
-		this.setGraphicsObject(null);
 	}
 	
 	public Bone(String name)
@@ -105,13 +103,42 @@ public class Bone extends CharacterElement
 			throw new IllegalArgumentException("The limits cannot be set to null.");
 	}
 	
-	public GraphicsObject getGraphicsObject()
+	@Override
+	public Vector3f getGlobalOrientation()
 	{
-		return this.graphics_object;
+		CharacterElement parent = this.getParent();
+		Vector3f orientation = parent.getGlobalOrientation();
+		orientation.add(this.getOrientation());
+		return orientation;
+	}
+		
+	@Override
+	public Vector3f getStartPosition()
+	{
+		CharacterElement parent = this.getParent();
+		return new Vector3f(parent.getEndPosition());
+	}
+		
+	@Override
+	public Vector3f getEndPosition()
+	{
+		CharacterElement parent = this.getParent();
+		Vector3f end_position = parent.getEndPosition();
+		Vector3f global_orientation = this.getGlobalOrientation();
+		end_position.x += global_orientation.x * this.length;
+		end_position.y += global_orientation.y * this.length;
+		end_position.z += global_orientation.z * this.length;
+		
+		return end_position;
 	}
 	
-	public void setGraphicsObject(GraphicsObject graphics_object)
+	@Override
+	public CharacterElement getParent()
 	{
-		this.graphics_object = graphics_object;
+		CharacterElement parent = super.getParent();
+		if(parent == null)
+			throw new IllegalStateException("Cannot calculate the position of an element that does not have a parent.");
+		
+		return parent;
 	}
 }

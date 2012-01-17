@@ -1,13 +1,14 @@
 package main.research.fstakem.mocap.parser;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AmcData 
+public class AmcData extends AcclaimData
 {
 	// Constants
 	
 	// Variables
-	public ArrayList<AcclaimFrame> frames;
+	public List<AcclaimFrame> frames;
 	
 	public AmcData()
 	{

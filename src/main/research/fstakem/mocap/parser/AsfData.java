@@ -2,26 +2,30 @@ package main.research.fstakem.mocap.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class AsfData 
+public class AsfData extends AcclaimData
 {
 	// Constants
 	
 	// Variables
 	public String version;
 	public String name;
-	public HashMap<String, String> units;
-	public HashMap<String, ArrayList<String>> root;
-	public ArrayList<AcclaimBone> bones;
-	public HashMap<String, ArrayList<String>> hierarchy;
+	public Map<String, String> units;
+	public List<String> documentation;
+	public AcclaimRoot root;
+	public List<AcclaimBone> bones;
+	public Map<String, List<String>> hierarchy;
 	
 	public AsfData()
 	{
 		this.version = "";
 		this.name = "";
 		this.units = new HashMap<String, String>();
-		this.root = new HashMap<String, ArrayList<String>>();
+		this.documentation = new ArrayList<String>();
+		this.root = new AcclaimRoot();
 		this.bones = new ArrayList<AcclaimBone>();
-		this.hierarchy = new HashMap<String, ArrayList<String>>();
+		this.hierarchy = new HashMap<String, List<String>>();
 	}
 }

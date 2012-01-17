@@ -3,6 +3,9 @@ package main.research.fstakem.mocap.parser;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import javax.vecmath.Vector3f;
 
 import main.research.fstakem.mocap.scene.AsfMapper;
 
@@ -20,10 +23,16 @@ public class AsfParser extends Parser
 	public static final String NAME_KEYWORD = "name";
 	public static final String UNITS_KEYWORD = "units";
 	public static final String ROOT_KEYWORD = "root";
+	public static final String DOCUMENTATION_KEYWORD = "documentation";
 	public static final String BONES_KEYWORD = "bonedata";
 	public static final String HIERARCHY_KEYWORD = "hierarchy";
 	private static final String START_LABEL = "begin";
 	private static final String END_LABEL = "end";
+	
+	public static final String ROOT_ORDER_LABEL = "order";
+	public static final String ROOT_AXIS_LABEL = "axis";
+	public static final String ROOT_POSITION_LABEL = "position";
+	public static final String ROOT_ORIENTATION_LABEL = "orientation";
 	
 	public static final String BONE_ID_LABEL = "id";
 	public static final String BONE_NAME_LABEL = "name";
@@ -41,19 +50,19 @@ public class AsfParser extends Parser
 	
 	}
 	
-	public static HashMap<String, ArrayList<String>> seperateSections(ArrayList<String> lines)
+	public static HashMap<String, List<String>> seperateSections(List<String> raw_lines)
 	{
 		logger.debug("AsfParser.seperateSections(): Entering method.");
 		
-		HashMap<String, ArrayList<String>> asf_sections = new HashMap<String, ArrayList<String>>();
+		HashMap<String, List<String>> asf_sections = new HashMap<String, List<String>>();
 		String current_keyword = "";
-		ArrayList<String> current_data = null;
+		List<String> current_data = null;
 		String line = "";
 		String[] tokens = null;
 		
-		for(int i = 0; i < lines.size(); i++)
+		for(int i = 0; i < raw_lines.size(); i++)
 		{
-			line = lines.get(i).trim();
+			line = raw_lines.get(i).trim();
 			if( line.startsWith(Parser.COMMENT_CHAR)  )
 					continue;
 			
@@ -87,11 +96,11 @@ public class AsfParser extends Parser
 		return asf_sections;
 	}
 		
-	public static String parseVersion(HashMap<String, ArrayList<String>> sections) throws ParseException
+	public static String parseVersion(HashMap<String, List<String>> sections) throws ParseException
 	{
 		logger.debug("AsfParser.parseVersion(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.VERSION_KEYWORD);
+		List<String> lines = sections.get(AsfParser.VERSION_KEYWORD);
 		if(lines.size() == 0)
 			throw new ParseException("The Asf version section was not formatting properly.", 0); 
 		
@@ -102,11 +111,11 @@ public class AsfParser extends Parser
 		return version;
 	}
 	
-	public static String parseName(HashMap<String, ArrayList<String>> sections) throws ParseException
+	public static String parseName(HashMap<String, List<String>> sections) throws ParseException
 	{
 		logger.debug("AsfParser.parseName(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.NAME_KEYWORD);
+		List<String> lines = sections.get(AsfParser.NAME_KEYWORD);
 		if(lines.size() == 0)
 			throw new ParseException("The Asf name section was not formatting properly.", 0); 
 		
@@ -117,11 +126,11 @@ public class AsfParser extends Parser
 		return name;
 	}
 	
-	public static HashMap<String, String> parseUnits(HashMap<String, ArrayList<String>> sections) throws ParseException
+	public static HashMap<String, String> parseUnits(HashMap<String, List<String>> sections) throws ParseException
 	{
 		logger.debug("AsfParser.parseUnits(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.UNITS_KEYWORD);
+		List<String> lines = sections.get(AsfParser.UNITS_KEYWORD);
 		HashMap<String, String> units = new HashMap<String, String>();
 		String line;
 		String[] tokens;
@@ -144,12 +153,21 @@ public class AsfParser extends Parser
 		return units;
 	}
 	
-	public static HashMap<String, ArrayList<String>> parseRoot(HashMap<String, ArrayList<String>> sections) throws ParseException
+	public static List<String> parseDocumentation(HashMap<String, List<String>> sections) throws ParseException
+	{
+		logger.debug("AsfParser.parseDocumentation(): Entering method.");
+		List<String> documentation = sections.get(AsfParser.DOCUMENTATION_KEYWORD);
+		
+		logger.debug("AsfParser.parseDocumentation(): Exiting method.");
+		return documentation;
+	}
+	
+	public static AcclaimRoot parseRoot(HashMap<String, List<String>> sections) throws ParseException
 	{
 		logger.debug("AsfParser.parseRoot(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.ROOT_KEYWORD);
-		HashMap<String, ArrayList<String>> root = new HashMap<String, ArrayList<String>>();
+		List<String> lines = sections.get(AsfParser.ROOT_KEYWORD);
+		AcclaimRoot root = new AcclaimRoot();
 		String line;
 		String[] tokens;
 		
@@ -160,10 +178,22 @@ public class AsfParser extends Parser
 			
 			if(tokens.length > 1)
 			{
-				ArrayList<String> values = new ArrayList<String>();
-				for(int j = 1; j < tokens.length; j++)
-					values.add(tokens[j]);
-				root.put(tokens[0], values);
+				if(tokens[0].equals(AsfParser.ROOT_ORDER_LABEL) && tokens.length > 6)
+				{
+					for(int j = 1; j < tokens.length; j++)
+						root.amc_data_order[j-1] = AcclaimData.getOperationOnAxisFromString(tokens[j]);
+				}
+				else if(tokens[0].equals(AsfParser.ROOT_AXIS_LABEL))
+				{
+					for(int j = 0; j < 3; j++)
+						root.orientation_order[j] = AcclaimData.getAxisFromString(tokens[1].substring(j, j+1));
+				}
+				else if(tokens[0].equals(AsfParser.ROOT_POSITION_LABEL) && tokens.length > 3)
+					root.position = new Vector3f( Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3]));
+				else if(tokens[0].equals(AsfParser.ROOT_ORIENTATION_LABEL) && tokens.length > 3)
+					root.orientation = new Vector3f( Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3]));
+				else
+					throw new ParseException("The Asf root section was not formatting properly.", 0);
 			}
 			else
 				throw new ParseException("The Asf root section was not formatting properly.", 0);
@@ -173,15 +203,15 @@ public class AsfParser extends Parser
 		return root;
 	}
 	
-	public static ArrayList<AcclaimBone> parseBones(HashMap<String, ArrayList<String>> sections)
+	public static List<AcclaimBone> parseBones(HashMap<String, List<String>> sections)
 	{
 		logger.debug("AsfParser.parseBones(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.BONES_KEYWORD);
-		ArrayList<AcclaimBone> bones = new ArrayList<AcclaimBone>();
+		List<String> lines = sections.get(AsfParser.BONES_KEYWORD);
+		List<AcclaimBone> bones = new ArrayList<AcclaimBone>();
 		String line;
 		String[] tokens;
-		ArrayList<String> bone_lines = new ArrayList<String>();
+		List<String> bone_lines = new ArrayList<String>();
 		
 		for(int i = 0; i < lines.size(); i++)
 		{
@@ -200,7 +230,7 @@ public class AsfParser extends Parser
 		return bones;
 	}
 	
-	private static AcclaimBone parseBone(ArrayList<String> lines)
+	private static AcclaimBone parseBone(List<String> lines)
 	{
 		logger.debug("AsfParser.parseBone(): Entering method.");
 		
@@ -227,10 +257,9 @@ public class AsfParser extends Parser
 				last_label = AsfParser.BONE_NAME_LABEL;
 			}
 			else if(tokens[0].equals(AsfParser.BONE_DIRECTION_LABEL) &&
-					tokens.length > 1)
+					tokens.length > 3)
 			{
-				for(int j = 1; j < tokens.length; j++)
-					bone.direction.add(Float.valueOf(tokens[j]));
+				bone.direction = new Vector3f( Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3]));
 				last_label = AsfParser.BONE_DIRECTION_LABEL;
 			}
 			else if(tokens[0].equals(AsfParser.BONE_LENGTH_LABEL) &&
@@ -240,17 +269,19 @@ public class AsfParser extends Parser
 				last_label = AsfParser.BONE_LENGTH_LABEL;
 			}
 			else if(tokens[0].equals(AsfParser.BONE_AXIS_LABEL) &&
-					tokens.length > 1)
+					tokens.length > 4)
 			{
-				for(int j = 1; j < tokens.length - 1; j++)
-					bone.axis.add(Float.valueOf(tokens[j]));
+				bone.orientation = new Vector3f( Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3]));
+				for(int j = 0; j < 3; j++)
+					bone.orientation_order[j] = AcclaimData.getAxisFromString(tokens[4].substring(j, j+1));
+					
 				last_label = AsfParser.BONE_AXIS_LABEL;
 			}
 			else if(tokens[0].equals(AsfParser.BONE_DOF_LABEL) &&
 					tokens.length > 1)
 			{
 				for(int j = 1; j < tokens.length; j++)
-					bone.dof.add(tokens[j]);
+					bone.dof.add(AcclaimData.getOperationOnAxisFromString(tokens[j]));
 				last_label = AsfParser.BONE_DOF_LABEL;
 			}
 			else if( (tokens[0].equals(AsfParser.BONE_LIMITS_LABEL) &&
@@ -273,12 +304,12 @@ public class AsfParser extends Parser
 		return bone;
 	}
 	
-	public static HashMap<String, ArrayList<String>> parseHierarchy(HashMap<String, ArrayList<String>> sections) throws ParseException
+	public static HashMap<String, List<String>> parseHierarchy(HashMap<String, List<String>> sections) throws ParseException
 	{
 		logger.debug("AsfParser.parseHierarchy(): Entering method.");
 		
-		ArrayList<String> lines = sections.get(AsfParser.HIERARCHY_KEYWORD);
-		HashMap<String, ArrayList<String>> hierarchy = new HashMap<String, ArrayList<String>>();
+		List<String> lines = sections.get(AsfParser.HIERARCHY_KEYWORD);
+		HashMap<String, List<String>> hierarchy = new HashMap<String, List<String>>();
 		String line;
 		String[] tokens;
 		

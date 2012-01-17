@@ -1,7 +1,7 @@
 package main.research.fstakem.mocap.parser;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class AcclaimFrame 
@@ -10,12 +10,12 @@ public class AcclaimFrame
 	
 	// Variables
 	public int number;
-	public HashMap<String, ArrayList<Float>> bone_positions;
+	public HashMap<String, List<Float>> bone_positions;
 	
 	public AcclaimFrame()
 	{
 		this.number = -1;
-		this.bone_positions = new HashMap<String, ArrayList<Float>>();
+		this.bone_positions = new HashMap<String, List<Float>>();
 	}
 	
 	public String toString()
@@ -23,10 +23,10 @@ public class AcclaimFrame
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.number);
 		sb.append("\n");
-		for(Entry<String, ArrayList<Float>> entry : this.bone_positions.entrySet())
+		for(Entry<String, List<Float>> entry : this.bone_positions.entrySet())
 		{
 			sb.append(entry.getKey() + "\t");
-			ArrayList<Float> bone_values = entry.getValue();
+			List<Float> bone_values = entry.getValue();
 			for(int i = 0; i < bone_values.size(); i++)
 			{	
 				sb.append(bone_values.get(i));

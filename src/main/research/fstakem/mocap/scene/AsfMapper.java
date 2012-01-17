@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.vecmath.Vector3f;
 import main.research.fstakem.mocap.parser.AcclaimBone;
+import main.research.fstakem.mocap.parser.AcclaimData;
+import main.research.fstakem.mocap.parser.AcclaimRoot;
 import main.research.fstakem.mocap.parser.AsfParser;
-import main.research.fstakem.mocap.scene.CharacterElement.Axis;
-import main.research.fstakem.mocap.scene.CharacterElement.Dof;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +30,17 @@ public class AsfMapper
 		return root;
 	}
 	
-	public static void addDetailsToRoot(RootElement root, HashMap<String, ArrayList<String>> acclaim_root) throws Exception
+	public static void addDetailsToRoot(RootElement root, AcclaimRoot acclaim_root) throws Exception
 	{
 		logger.debug("AsfMapper.addDetailsToRoot(): Entering method.");
+		
+		root.setStartPosition(new Vector3f(acclaim_root.position));
+		root.setOrientation(new Vector3f(acclaim_root.orientation));
+		
+		
+		
+		
+		
 		
 		String label;
 		ArrayList<String> values;
@@ -127,26 +135,26 @@ public class AsfMapper
 		return child_bones;
 	}
 	
-	private static ArrayList<CharacterElement.Dof> getRootOrder(ArrayList<String> values)
+	private static ArrayList<AcclaimData.OperationOnAxis> getRootOrder(ArrayList<String> values)
 	{
 		logger.debug("AsfMapper.getRootOrder(): Entering method.");
 		
-		ArrayList<CharacterElement.Dof> order = new ArrayList<CharacterElement.Dof>();
+		ArrayList<AcclaimData.OperationOnAxis> order = new ArrayList<AcclaimData.OperationOnAxis>();
 		for(int i = 0; i < values.size(); i++)
-			order.add( CharacterElement.getDofValueFromString(values.get(i)) );
+			order.add( AcclaimData.getOperationOnAxisFromString(values.get(i)) );
 		
 		logger.debug("AsfMapper.getRootOrder(): Exiting method.");
 		return order;
 	}
 	
-	private static ArrayList<Axis> getRootAxis(ArrayList<String> values)
+	private static ArrayList<AcclaimData.Axis> getRootAxis(ArrayList<String> values)
 	{
 		logger.debug("AsfMapper.getRootAxis(): Entering method.");
 		
 		String out = values.get(0);
-		ArrayList<Axis> axis = new ArrayList<Axis>();
+		ArrayList<AcclaimData.Axis> axis = new ArrayList<AcclaimData.Axis>();
 		for(int i = 0; i < values.size(); i++)
-			axis.add( CharacterElement.getAxisValueFromString(out.substring(i, i+1)) );
+			axis.add( AcclaimData.getAxisFromString(out.substring(i, i+1)) );
 		
 		logger.debug("AsfMapper.getRootAxis(): Exiting method.");
 		return axis;	
@@ -164,13 +172,13 @@ public class AsfMapper
 		return axis;
 	}
 	
-	private static ArrayList<Dof> getBoneDof(AcclaimBone acclaim_bone)
+	private static ArrayList<AcclaimData.OperationOnAxis> getBoneDof(AcclaimBone acclaim_bone)
 	{
 		logger.debug("AsfMapper.getBoneDof(): Entering method.");
 		
-		ArrayList<Dof> dof = new ArrayList<Dof>();
+		ArrayList<AcclaimData.OperationOnAxis> dof = new ArrayList<AcclaimData.OperationOnAxis>();
 		for(int j = 0; j < acclaim_bone.dof.size(); j++)
-			dof.add( CharacterElement.getDofValueFromString(acclaim_bone.dof.get(j)) );
+			dof.add( AcclaimData.getOperationOnAxisFromString(acclaim_bone.dof.get(j)) );
 		
 		logger.debug("AsfMapper.getBoneDof(): Exiting method.");
 		return dof;

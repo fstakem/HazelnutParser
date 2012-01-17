@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -19,12 +20,12 @@ public class AmcParser extends Parser
 		
 	}
 	
-	public static ArrayList<ArrayList<String>> seperateFrames(ArrayList<String> lines)
+	public static List<List<String>> seperateFrames(List<String> lines)
 	{
 		logger.debug("AmcParser.seperateFrames(): Entering method.");
 		
-		ArrayList<ArrayList<String>> frames = new ArrayList<ArrayList<String>>();
-		ArrayList<String> frame_lines = new ArrayList<String>();
+		List<List<String>> frames = new ArrayList<List<String>>();
+		List<String> frame_lines = new ArrayList<String>();
 		Pattern number_pattern = Pattern.compile("[0-9]+");
 		String line;
 		String[] tokens;
@@ -54,18 +55,18 @@ public class AmcParser extends Parser
 		return frames;
 	}
 	
-	public static ArrayList<AcclaimFrame> parseFrames(ArrayList<ArrayList<String>> frames) throws ParseException
+	public static List<AcclaimFrame> parseFrames(List<List<String>> frames) throws ParseException
 	{
 		logger.debug("AmcParser.parseFrames(): Entering method.");
 		
-		ArrayList<AcclaimFrame> acclaim_frames = new ArrayList<AcclaimFrame>();
+		List<AcclaimFrame> acclaim_frames = new ArrayList<AcclaimFrame>();
 		HashSet<String> bones = AmcParser.initializeBones(frames.get(0));
 		
 		for(int i = 0; i < frames.size(); i++)
 		{
 			logger.info("AmcParser.parseFrames(): Parsing frame {}.", i+1);
 			
-			ArrayList<String> frame = frames.get(i);
+			List<String> frame = frames.get(i);
 			acclaim_frames.add(AmcParser.parseFrame(frame, bones));
 		}
 		
@@ -73,7 +74,7 @@ public class AmcParser extends Parser
 		return acclaim_frames;
 	}
 		
-	private static AcclaimFrame parseFrame(ArrayList<String> lines, HashSet<String> bones) throws ParseException
+	private static AcclaimFrame parseFrame(List<String> lines, HashSet<String> bones) throws ParseException
 	{
 		logger.debug("AmcParser.parseFrame(): Entering method.");
 		
@@ -81,7 +82,7 @@ public class AmcParser extends Parser
 		Pattern number_pattern = Pattern.compile("[0-9]+");	
 		String line;
 		String[] tokens;
-		ArrayList<Float> position;
+		List<Float> position;
 		
 		for(int i = 0; i < lines.size(); i++)
 		{
@@ -112,7 +113,7 @@ public class AmcParser extends Parser
 		return frame;
 	}
 	
-	private static HashSet<String> initializeBones(ArrayList<String> lines)
+	private static HashSet<String> initializeBones(List<String> lines)
 	{
 		logger.debug("AmcParser.initializeBones(): Entering method.");
 		

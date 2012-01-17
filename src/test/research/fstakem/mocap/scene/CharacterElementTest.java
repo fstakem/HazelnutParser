@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import junit.framework.Assert;
 
+import main.research.fstakem.mocap.parser.AcclaimData;
 import main.research.fstakem.mocap.scene.CharacterElement;
 import main.research.fstakem.mocap.scene.CharacterElementState;
-import main.research.fstakem.mocap.scene.CharacterElement.Axis;
-import main.research.fstakem.mocap.scene.CharacterElement.Dof;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -82,15 +81,20 @@ public class CharacterElementTest
     	logger.debug("Test to make sure the dof string is properly parsed.");
     	
     	String[] dof_strings = { "tx", "ty", "tz", "rx", "ry", "rz" }; 
-    	Dof[] dof = { Dof.TX, Dof.TY, Dof.TZ, Dof.RX, Dof.RY, Dof.RZ };
+    	AcclaimData.OperationOnAxis[] dof = { AcclaimData.OperationOnAxis.TX, 
+    										  AcclaimData.OperationOnAxis.TY, 
+    										  AcclaimData.OperationOnAxis.TZ, 
+    										  AcclaimData.OperationOnAxis.RX, 
+    										  AcclaimData.OperationOnAxis.RY, 
+    										  AcclaimData.OperationOnAxis.RZ };
     	
     	for(int i = 0; i < dof_strings.length; i++)
     	{
-    		Dof d = null;
+    		AcclaimData.OperationOnAxis d = null;
     		try 
     		{
     			logger.info("Testing the \'{}\' dof element.", i+1);
-				d = CharacterElement.getDofValueFromString(dof_strings[i]);
+				d = AcclaimData.getOperationOnAxisFromString(dof_strings[i]);
 			} 
     		catch (Exception e) 
     		{
@@ -108,15 +112,15 @@ public class CharacterElementTest
     	logger.debug("Test to make sure the axis string is properly parsed.");
     	
     	String[] axis_strings = { "x", "y", "z" }; 
-    	Axis[] axis = { Axis.X, Axis.Y, Axis.Z };
+    	AcclaimData.Axis[] axis = { AcclaimData.Axis.X, AcclaimData.Axis.Y, AcclaimData.Axis.Z };
     	
     	for(int i = 0; i < axis_strings.length; i++)
     	{
-    		Axis a = null;
+    		AcclaimData.Axis a = null;
     		try 
     		{
     			logger.info("Testing the \'{}\' axis element.", i+1);
-				a = CharacterElement.getAxisValueFromString(axis_strings[i]);
+				a = AcclaimData.getAxisFromString(axis_strings[i]);
 			} 
     		catch (Exception e) 
     		{

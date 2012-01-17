@@ -1,27 +1,30 @@
 package main.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector3f;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CharacterElement 
 {
+	// Logger
+	private static final Logger logger = LoggerFactory.getLogger(CharacterElement.class);
+		
 	// State
 	private Vector3f start_position;
 	private Vector3f orientation;
 	
-	// Unique types
-	public enum Dof { TX, TY, TZ, RX, RY, RZ }
-	public enum Axis { X, Y, Z };
-	
 	// Attributes
 	private String name;
-	private ArrayList<CharacterElementState> states;
+	private List<CharacterElementState> states;
 	private int current_state;
 	
 	// Linking
 	private CharacterElement parent;
-	private ArrayList<CharacterElement> children;
+	private List<CharacterElement> children;
 	
 	public CharacterElement()
 	{
@@ -73,36 +76,6 @@ public class CharacterElement
 		else
 			throw new IllegalArgumentException("The orientation cannot be set to null.");
 	}
-	
-	public static Dof getDofValueFromString(String value)
-	{
-		if(value.toLowerCase().equals("tx"))
-			return Dof.TX;
-		else if(value.toLowerCase().equals("ty"))
-			return Dof.TY;
-		else if(value.toLowerCase().equals("tz"))
-			return Dof.TZ;
-		else if(value.toLowerCase().equals("rx"))
-			return Dof.RX;
-		else if(value.toLowerCase().equals("ry"))
-			return Dof.RY;
-		else if(value.toLowerCase().equals("rz"))
-			return Dof.RZ;
-		
-		throw new IllegalArgumentException("The string value is not a recognized Dof.");
-	}
-	
-	public static Axis getAxisValueFromString(String value)
-	{
-		if(value.toLowerCase().equals("x"))
-			return Axis.X;
-		else if(value.toLowerCase().equals("y"))
-			return Axis.Y;
-		else if(value.toLowerCase().equals("z"))
-			return Axis.Z;
-		
-		throw new IllegalArgumentException("The string value is not a recognized Axis.");
-	}
 		
 	public String getName()
 	{
@@ -114,7 +87,7 @@ public class CharacterElement
 		this.name = name;
 	}
 	
-	public void setStates(ArrayList<CharacterElementState> states)
+	public void setStates(List<CharacterElementState> states)
 	{
 		if(states != null)
 			this.states = states;
@@ -198,18 +171,18 @@ public class CharacterElement
 		return this.children.size();
 	}
 	
-	public ArrayList<CharacterElement> getChildren()
+	public List<CharacterElement> getChildren()
 	{
 		return this.children;
 	}
 	
-	public ArrayList<CharacterElement> getAllSubElements()
+	public List<CharacterElement> getAllSubElements()
 	{
-		ArrayList<CharacterElement> elements = new ArrayList<CharacterElement>();
+		List<CharacterElement> elements = new ArrayList<CharacterElement>();
 		for(CharacterElement e : this.children)
 		{
 			elements.add(e);
-			ArrayList<CharacterElement> child_elements = e.getAllSubElements();
+			List<CharacterElement> child_elements = e.getAllSubElements();
 			if(child_elements.size() > 0)
 				elements.addAll(child_elements);
 		}
@@ -217,7 +190,7 @@ public class CharacterElement
 		return elements;
 	}
 	
-	public void setChildren(ArrayList<CharacterElement> children)
+	public void setChildren(List<CharacterElement> children)
 	{
 		if(children != null)
 		{
@@ -230,7 +203,7 @@ public class CharacterElement
 			throw new IllegalArgumentException("The child nodes cannot be set to null.");
 	}
 	
-	public void addChildren(ArrayList<CharacterElement> children)
+	public void addChildren(List<CharacterElement> children)
 	{
 		if(children != null)
 		{
@@ -287,5 +260,29 @@ public class CharacterElement
     	   return true;
         
         return false;
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder output = new StringBuilder();
+		Vector3f global_orientation = this.getGlobalOrientation();
+		output.append("\'");
+		output.append(this.getName());
+		output.append("\' location(");
+		output.append(this.start_position.x);
+		output.append(", ");
+		output.append(this.start_position.y);
+		output.append(", ");
+		output.append(this.start_position.z);
+		output.append(") rotation(");
+		output.append(global_orientation.x);
+		output.append(", ");
+		output.append(global_orientation.y);
+		output.append(", ");
+		output.append(global_orientation.z);
+		output.append(")");
+		
+		return output.toString();
 	}
 }

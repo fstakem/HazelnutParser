@@ -1,7 +1,7 @@
 package test.research.fstakem.mocap.parser;
 
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.List;
 
 import main.research.fstakem.mocap.parser.AcclaimImporter;
 import main.research.fstakem.mocap.parser.AmcData;
@@ -71,7 +71,7 @@ public class AcclaimImporterTest
     { 
     	logger.debug("Test to make sure the asf data is properly parsed."); 
     	
-    	ArrayList<String> raw_lines = AsfParserTest.createAsfData();
+    	List<String> raw_lines = AsfParserTest.createAsfData();
     	AsfData asf_data = null;
     	
     	try 
@@ -91,7 +91,7 @@ public class AcclaimImporterTest
     	logger.debug("Test to make sure the amc data is properly parsed."); 
     	
     	int[] frame_numbers = {1, 2};
-		ArrayList<String> raw_lines = AmcParserTest.createAmcData(frame_numbers);
+		List<String> raw_lines = AmcParserTest.createAmcData(frame_numbers);
 		AmcData amc_data = null;
 		
 		try 

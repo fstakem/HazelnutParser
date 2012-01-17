@@ -8,12 +8,11 @@ import javax.vecmath.Vector3f;
 import junit.framework.Assert;
 
 import main.research.fstakem.mocap.parser.AcclaimBone;
+import main.research.fstakem.mocap.parser.AcclaimData;
 import main.research.fstakem.mocap.scene.AsfMapper;
 import main.research.fstakem.mocap.scene.Bone;
 import main.research.fstakem.mocap.scene.CharacterElement;
 import main.research.fstakem.mocap.scene.RootElement;
-import main.research.fstakem.mocap.scene.CharacterElement.Axis;
-import main.research.fstakem.mocap.scene.CharacterElement.Dof;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -135,18 +134,18 @@ public class AsfMapperTest extends MapperTest
     	
     	// Test dof
     	logger.info("Testing the root element dof.");
-    	ArrayList<Dof> order = root.getOrder();
+    	ArrayList<AcclaimData.OperationOnAxis> order = root.getOrder();
     	for(int i = 0; i < order.size(); i++)
     		Assert.assertEquals("Root element dof created does not match initial dof.", 
-    							CharacterElement.getDofValueFromString(MapperTest.asf_root_order[i]), 
+    							AcclaimData.getOperationOnAxisFromString(MapperTest.asf_root_order[i]), 
     							order.get(i));
     	
     	// Test axis
     	logger.info("Testing the root element axis.");
-    	ArrayList<Axis> axis = root.getAxis();
+    	ArrayList<AcclaimData.Axis> axis = root.getAxis();
     	for(int i = 0; i < axis.size(); i++)
     		Assert.assertEquals("Root element axis dof created does not match initial axis.", 
-    							CharacterElement.getAxisValueFromString(MapperTest.asf_root_axis.substring(i, i+1)), 
+    							AcclaimData.getAxisFromString(MapperTest.asf_root_axis.substring(i, i+1)), 
     							axis.get(i));
 
     	// Test position
@@ -245,7 +244,7 @@ public class AsfMapperTest extends MapperTest
     	// Test dof
     	for(int i = 0; i < asf_bone.dof.size(); i++)
     		Assert.assertEquals("Bone dof created does not match initial dof.", 
-    							CharacterElement.getDofValueFromString(asf_bone.dof.get(i)), bone.getDof().get(i));
+    							AcclaimData.getOperationOnAxisFromString(asf_bone.dof.get(i)), bone.getDof().get(i));
     	
     	// Test limits
     	for(int i = 0; i < asf_bone.limits.size(); i++)

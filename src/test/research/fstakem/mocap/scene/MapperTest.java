@@ -2,12 +2,14 @@ package test.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import main.research.fstakem.mocap.parser.AcclaimBone;
+import main.research.fstakem.mocap.parser.AcclaimData;
 import main.research.fstakem.mocap.parser.AcclaimFrame;
 import main.research.fstakem.mocap.parser.AmcData;
 import main.research.fstakem.mocap.parser.AsfData;
-
+import main.research.fstakem.mocap.scene.CharacterElement;
 
 public class MapperTest 
 {
@@ -28,7 +30,10 @@ public class MapperTest
 	public static final float[] asf_bone_direction = { 0.5f, 1.25f, 2.25f };
 	public static final float asf_bone_length = 1.5f;
 	public static final String[] asf_bone_dof = { "RX", "RY", "RZ" };
-	public static final float[] asf_bone_axis = { 10.0f, 20.0f, 30.0f };
+	private static final AcclaimData.Axis[] asf_bone_axis_keys = { AcclaimData.Axis.X,
+																   AcclaimData.Axis.Y,
+																   AcclaimData.Axis.Z };
+	private static final float[] asf_bone_axis_values = { 10.0f, 20.0f, 30.0f };
 	public static final float[] asf_bone_limits = { 45.0f, 180.0f };
 	
 	public static final int amc_number_of_frames = 2;
@@ -167,11 +172,12 @@ public class MapperTest
     	bone.direction = direction;
     	bone.length = MapperTest.asf_bone_length * multiplier;
     	
-    	ArrayList<Float> axis = new ArrayList<Float>();
-    	for(float v : MapperTest.asf_bone_axis)
-    		axis.add(v);
+    	//ArrayList<Float> axis = new ArrayList<Float>();
+    	LinkedHashMap<AcclaimData.Axis, Float> axis = new LinkedHashMap<AcclaimData.Axis, Float>();
+    	for(int i = 0; i < MapperTest.asf_bone_axis_keys.length; i++)
+    		axis.put(MapperTest.asf_bone_axis_keys[i], MapperTest.asf_bone_axis_values[i]);
     	bone.axis = axis;
-    	
+    
     	ArrayList<String> dof = new ArrayList<String>();
     	for(String v : MapperTest.asf_bone_dof)
     		dof.add(v);

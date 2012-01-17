@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.vecmath.Vector3f;
 
+import main.research.fstakem.mocap.parser.AcclaimData;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +16,8 @@ public class CharacterElement
 	private static final Logger logger = LoggerFactory.getLogger(CharacterElement.class);
 		
 	// State
-	private Vector3f start_position;
 	private Vector3f orientation;
+	private AcclaimData.Axis[] orientation_order;
 	
 	// Attributes
 	private String name;
@@ -37,31 +39,26 @@ public class CharacterElement
 		this.setChildren(new ArrayList<CharacterElement>());
 		this.setStates(new ArrayList<CharacterElementState>());
 		this.current_state = 0;
-		this.setStartPosition(new Vector3f());
 		this.setOrientation(new Vector3f());
+		AcclaimData.Axis[] orientation_order = new AcclaimData.Axis[]{ AcclaimData.Axis.X, 
+				   AcclaimData.Axis.Y, 
+				   AcclaimData.Axis.Z};
+		this.setOrientationOrder(orientation_order);
 	}
 	
-	public Vector3f getStartPosition()
+	Vector3f getStartPosition() 
 	{
-		return this.start_position;
+		return null;
 	}
 	
 	public void setStartPosition(Vector3f position)
 	{
-		if(position != null)
-			this.start_position = position;
-		else
-			throw new IllegalArgumentException("The position cannot be set to null.");
+		
 	}
 	
 	public Vector3f getEndPosition()
 	{
-		return this.start_position;
-	}
-	
-	public Vector3f getGlobalOrientation()
-	{
-		return new Vector3f(this.orientation);
+		return null;
 	}
 				
 	public Vector3f getOrientation()
@@ -75,6 +72,22 @@ public class CharacterElement
 			this.orientation = orientation;
 		else
 			throw new IllegalArgumentException("The orientation cannot be set to null.");
+	}
+	
+	public AcclaimData.Axis[] getOrientationOrder()
+	{
+		return this.orientation_order;
+	}
+	
+	public void setOrientationOrder(AcclaimData.Axis[] orientation_order)
+	{
+		if(orientation_order.length == 3)
+		{
+			for(int i = 0; i < orientation_order.length; i++)
+				this.orientation_order[i] = orientation_order[i];
+		}
+		else
+			throw new IllegalArgumentException("The order of the amc orientation must have 3 values.");
 	}
 		
 	public String getName()
@@ -266,22 +279,6 @@ public class CharacterElement
 	public String toString()
 	{
 		StringBuilder output = new StringBuilder();
-		Vector3f global_orientation = this.getGlobalOrientation();
-		output.append("\'");
-		output.append(this.getName());
-		output.append("\' location(");
-		output.append(this.start_position.x);
-		output.append(", ");
-		output.append(this.start_position.y);
-		output.append(", ");
-		output.append(this.start_position.z);
-		output.append(") rotation(");
-		output.append(global_orientation.x);
-		output.append(", ");
-		output.append(global_orientation.y);
-		output.append(", ");
-		output.append(global_orientation.z);
-		output.append(")");
 		
 		return output.toString();
 	}

@@ -1,14 +1,12 @@
 package main.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.vecmath.Vector3f;
 import main.research.fstakem.mocap.parser.AcclaimBone;
-import main.research.fstakem.mocap.parser.AcclaimData;
 import main.research.fstakem.mocap.parser.AcclaimRoot;
-import main.research.fstakem.mocap.parser.AsfParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,7 @@ public class AsfMapper
 	// Logger
 	private static final Logger logger = LoggerFactory.getLogger(AsfMapper.class);
 		
-	public static RootElement createCharacterElementHierarchy(HashMap<String, ArrayList<String>> hierarchy) throws Exception
+	public static RootElement createCharacterElementHierarchy(Map<String, List<String>> hierarchy) throws Exception
 	{
 		logger.debug("AsfMapper.createCharacterElementHierarchy(): Entering method.");
 		
@@ -36,40 +34,13 @@ public class AsfMapper
 		
 		root.setStartPosition(new Vector3f(acclaim_root.position));
 		root.setOrientation(new Vector3f(acclaim_root.orientation));
-		
-		
-		
-		
-		
-		
-		String label;
-		ArrayList<String> values;
-		
-		for(Map.Entry<String, ArrayList<String>> entry : acclaim_root.entrySet())
-		{
-			label = entry.getKey();
-			values = entry.getValue();
-			
-			if(label.equals(AsfParser.BONE_ORDER_LABEL))
-				root.setOrder(AsfMapper.getRootOrder(values));
-			else if(label.equals(AsfParser.BONE_AXIS_LABEL))
-				root.setAxis(AsfMapper.getRootAxis(values));
-			else if(label.equals(AsfParser.BONE_POSITION_LABEL))
-			{
-				float[] out = stringToFloatArray(values);
-				root.setStartPosition(new Vector3f(out[0], out[1], out[2]));
-			}
-			else if(label.equals(AsfParser.BONE_ORIENTATION_LABEL))
-			{
-				float[] out = stringToFloatArray(values);
-				root.setOrientation(new Vector3f(out[0], out[1], out[2]));
-			}
-		}
+		root.setAmcDataOrder(acclaim_root.amc_data_order);
+		root.setOrientationOrder(acclaim_root.orientation_order);
 		
 		logger.debug("AsfMapper.addDetailsToRoot(): Exiting method.");
 	}
 	
-	public static void addDetailsToBones(RootElement root, ArrayList<AcclaimBone> acclaim_bones) throws Exception
+	public static void addDetailsToBones(RootElement root, List<AcclaimBone> acclaim_bones) throws Exception
 	{
 		logger.debug("AsfMapper.addDetailsToBones(): Entering method.");
 		
@@ -79,43 +50,28 @@ public class AsfMapper
 			Bone bone = (Bone) root.findCharacterElement(acclaim_bone.name);
 			
 			if(bone == null)
-			{
 				throw new Exception("Could not find " + acclaim_bone.name + ". ");
-			}
 			
 			logger.info("AsfMapper.addDetailsToBones(): Adding details to {}.", bone.getName());
 			
-			// Id
 			bone.setId(acclaim_bone.id);
-			
-			// Orientation
-			ArrayList<Float> d = acclaim_bone.direction;
-			bone.setOrientation(new Vector3f(d.get(0).floatValue(), 
-											 d.get(1).floatValue(), 
-											 d.get(2).floatValue()));
-			
-			// Length
+			bone.setDirection(new Vector3f(acclaim_bone.direction));
 			bone.setLength(acclaim_bone.length);
-			
-			// Axis
-			bone.setAxis(AsfMapper.getBoneAxis(acclaim_bone));
-			
-			// Dof
-			bone.setDof(AsfMapper.getBoneDof(acclaim_bone));
-			
-			// Limits
-			bone.setLimits(AsfMapper.getBoneLimits(acclaim_bone));
+			bone.setOrientation(new Vector3f(acclaim_bone.orientation));
+			bone.setOrientationOrder(acclaim_bone.orientation_order);
+			bone.setDof(acclaim_bone.dof);
+			bone.setLimits(acclaim_bone.limits);
 		}
 		
 		logger.debug("AsfMapper.addDetailsToBones(): Exiting method.");
 	}
 	
-	private static ArrayList<CharacterElement> createChildBones(CharacterElement parent, HashMap<String, ArrayList<String>> hierarchy)
+	private static List<CharacterElement> createChildBones(CharacterElement parent, Map<String, List<String>> hierarchy)
 	{
 		logger.debug("AsfMapper.createChildBones(): Entering recursive method with parent => \'{}\'.", parent.getName());
 		
-		ArrayList<CharacterElement> child_bones = new ArrayList<CharacterElement>();
-		ArrayList<String> child_names_of_bones = hierarchy.get(parent.getName());
+		List<CharacterElement> child_bones = new ArrayList<CharacterElement>();
+		List<String> child_names_of_bones = hierarchy.get(parent.getName());
 		
 		if(child_names_of_bones != null)
 		{
@@ -123,7 +79,7 @@ public class AsfMapper
 			{
 				logger.info("AsfMapper.createChildBones(): Creating bone \'{}\' connected to parent \'{}\' in the hierarchy.", bone_name, parent.getName());
 				Bone bone = new Bone(bone_name);
-				ArrayList<CharacterElement> children = AsfMapper.createChildBones(bone, hierarchy);
+				List<CharacterElement> children = AsfMapper.createChildBones(bone, hierarchy);
 				
 				if(children.size() > 0)
 					bone.addChildren(children);
@@ -133,83 +89,5 @@ public class AsfMapper
 		
 		logger.debug("AsfMapper.createChildBones(): Exiting recursive method with parent => \'{}\'.", parent.getName());
 		return child_bones;
-	}
-	
-	private static ArrayList<AcclaimData.OperationOnAxis> getRootOrder(ArrayList<String> values)
-	{
-		logger.debug("AsfMapper.getRootOrder(): Entering method.");
-		
-		ArrayList<AcclaimData.OperationOnAxis> order = new ArrayList<AcclaimData.OperationOnAxis>();
-		for(int i = 0; i < values.size(); i++)
-			order.add( AcclaimData.getOperationOnAxisFromString(values.get(i)) );
-		
-		logger.debug("AsfMapper.getRootOrder(): Exiting method.");
-		return order;
-	}
-	
-	private static ArrayList<AcclaimData.Axis> getRootAxis(ArrayList<String> values)
-	{
-		logger.debug("AsfMapper.getRootAxis(): Entering method.");
-		
-		String out = values.get(0);
-		ArrayList<AcclaimData.Axis> axis = new ArrayList<AcclaimData.Axis>();
-		for(int i = 0; i < values.size(); i++)
-			axis.add( AcclaimData.getAxisFromString(out.substring(i, i+1)) );
-		
-		logger.debug("AsfMapper.getRootAxis(): Exiting method.");
-		return axis;	
-	}
-	
-	private static ArrayList<Float> getBoneAxis(AcclaimBone acclaim_bone)
-	{
-		logger.debug("AsfMapper.getBoneAxis(): Entering method.");
-		
-		ArrayList<Float> axis = new ArrayList<Float>();
-		for(int j = 0; j < acclaim_bone.axis.size(); j++)
-			axis.add( acclaim_bone.axis.get(j) );
-		
-		logger.debug("AsfMapper.getBoneAxis(): Exiting method.");
-		return axis;
-	}
-	
-	private static ArrayList<AcclaimData.OperationOnAxis> getBoneDof(AcclaimBone acclaim_bone)
-	{
-		logger.debug("AsfMapper.getBoneDof(): Entering method.");
-		
-		ArrayList<AcclaimData.OperationOnAxis> dof = new ArrayList<AcclaimData.OperationOnAxis>();
-		for(int j = 0; j < acclaim_bone.dof.size(); j++)
-			dof.add( AcclaimData.getOperationOnAxisFromString(acclaim_bone.dof.get(j)) );
-		
-		logger.debug("AsfMapper.getBoneDof(): Exiting method.");
-		return dof;
-	}
-	
-	private static ArrayList<ArrayList<Float>> getBoneLimits(AcclaimBone acclaim_bone)
-	{
-		logger.debug("AsfMapper.getBoneLimits(): Entering method.");
-		
-		ArrayList<ArrayList<Float>> limits = new ArrayList<ArrayList<Float>>();
-		for(int j = 0; j < acclaim_bone.limits.size(); j++)
-		{
-			ArrayList<Float> limits_tuple = new ArrayList<Float>();
-			for(int k = 0; k < acclaim_bone.limits.get(j).size(); k++)
-				limits_tuple.add( acclaim_bone.limits.get(j).get(k).floatValue() );
-			limits.add(limits_tuple);
-		}
-		
-		logger.debug("AsfMapper.getBoneLimits(): Exiting method.");
-		return limits;
-	}
-		
-	private static float[] stringToFloatArray(ArrayList<String> values)
-	{
-		logger.debug("AsfMapper.stringToFloatArray(): Entering method.");
-		
-		float[] output = new float[values.size()];
-		for(int i = 0; i < values.size(); i++)
-			output[i] = Float.valueOf(values.get(i));
-		
-		logger.debug("AsfMapper.stringToFloatArray(): Exiting method.");
-		return output;
 	}
 }

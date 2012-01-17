@@ -1,17 +1,18 @@
 package main.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CharacterElementState 
 {
-	public ArrayList<Float> state;
+	public List<Float> state;
 	
 	public CharacterElementState()
 	{
 		this(new ArrayList<Float>());
 	}
 	
-	public CharacterElementState(ArrayList<Float> state)
+	public CharacterElementState(List<Float> state)
 	{
 		if(state != null)
 			this.state = state;

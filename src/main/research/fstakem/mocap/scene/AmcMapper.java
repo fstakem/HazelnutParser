@@ -1,7 +1,7 @@
 package main.research.fstakem.mocap.scene;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
+import java.util.Map.Entry;
 
 
 import main.research.fstakem.mocap.parser.AcclaimFrame;
@@ -25,7 +25,7 @@ public class AmcMapper
 			logger.info("AmcMapper.addStateDataToBones(): Adding frame {}.", i+1);
 			
 			AcclaimFrame frame = amc_data.frames.get(i);
-			for(Map.Entry<String, ArrayList<Float>> entry : frame.bone_positions.entrySet())
+			for(Entry<String, List<Float>> entry : frame.bone_positions.entrySet())
 			{
 				CharacterElement character_element = root.findCharacterElement(entry.getKey());
 				character_element.addState(new CharacterElementState(entry.getValue()));

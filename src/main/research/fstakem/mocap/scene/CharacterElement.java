@@ -41,8 +41,8 @@ public class CharacterElement
 		this.current_state = 0;
 		this.setOrientation(new Vector3f());
 		AcclaimData.Axis[] orientation_order = new AcclaimData.Axis[]{ AcclaimData.Axis.X, 
-				   AcclaimData.Axis.Y, 
-				   AcclaimData.Axis.Z};
+				   													   AcclaimData.Axis.Y, 
+				   													   AcclaimData.Axis.Z };
 		this.setOrientationOrder(orientation_order);
 	}
 	
@@ -83,6 +83,9 @@ public class CharacterElement
 	{
 		if(orientation_order.length == 3)
 		{
+			if(this.orientation_order == null)
+				this.orientation_order = new AcclaimData.Axis[3];
+			
 			for(int i = 0; i < orientation_order.length; i++)
 				this.orientation_order[i] = orientation_order[i];
 		}
@@ -107,31 +110,10 @@ public class CharacterElement
 		else
 			throw new IllegalArgumentException("The state cannot be set to null.");
 	}
-	
-	public void addState(CharacterElementState state)
+		
+	public List<CharacterElementState> getStates()
 	{
-		if(state != null)
-			this.states.add(state);
-		else
-			throw new IllegalArgumentException("The state cannot be set to null.");
-	}
-	
-	public void addStateAt(int index, CharacterElementState state)
-	{
-		if(index == -1)
-			this.states.add(state);
-		else if(index > 0 && index < this.states.size())
-			this.states.add(index, state);
-		else
-			throw new IndexOutOfBoundsException("The state index is out of bounds.");
-	}
-	
-	public CharacterElementState getState(int index) throws Exception
-	{
-		if(index > 0 && index < this.states.size())
-			return this.states.get(index);
-		else
-			throw new IndexOutOfBoundsException("The state index is out of bounds.");
+		return this.states;
 	}
 	
 	public void setCurrentState(int current_state)

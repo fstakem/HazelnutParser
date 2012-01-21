@@ -89,14 +89,17 @@ public class AcclaimFileImporterTest
 		} 
     	catch (ParseException e) 
     	{
+    		e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} 
     	catch (FileNotFoundException e) 
 		{
+    		e.printStackTrace();
     		Assert.fail(e.getMessage());
 		} 
     	catch (IOException e) 
 		{
+    		e.printStackTrace();
     		Assert.fail(e.getMessage());
 		}
     }
@@ -114,14 +117,17 @@ public class AcclaimFileImporterTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} 
 		catch (FileNotFoundException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} 
 		catch (IOException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     }

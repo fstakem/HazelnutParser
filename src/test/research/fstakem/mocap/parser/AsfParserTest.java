@@ -155,6 +155,7 @@ public class AsfParserTest
 		} 
     	catch (ParseException e) 
     	{
+    		e.printStackTrace();
     		Assert.fail(e.getMessage());
 		}
     }
@@ -174,6 +175,7 @@ public class AsfParserTest
 		} 
     	catch (ParseException e) 
     	{
+    		e.printStackTrace();
     		Assert.fail(e.getMessage());
 		}
     }
@@ -190,6 +192,7 @@ public class AsfParserTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	
@@ -219,6 +222,7 @@ public class AsfParserTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
 		
@@ -238,6 +242,7 @@ public class AsfParserTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	
@@ -297,6 +302,7 @@ public class AsfParserTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	

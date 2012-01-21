@@ -20,6 +20,19 @@ public class CharacterElementState
 			this.state = new ArrayList<Float>();
 	}
 	
+	public List<Float> getValues()
+	{
+		return this.state;
+	}
+	
+	public void setValues(List<Float> state)
+	{
+		if(state != null)
+			this.state = state;
+		else
+			throw new IllegalArgumentException("The state cannot be null.");
+	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -38,5 +51,23 @@ public class CharacterElementState
        }
         
         return true;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String output = "(";
+		
+		for(int i = 0; i < this.state.size(); i++)
+		{
+			output += String.valueOf(this.state.get(i));
+			
+			if(i < this.state.size() - 1)
+				output += ", ";
+			else
+				output += ")";
+		}
+		
+		return output;
 	}
 }

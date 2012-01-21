@@ -61,6 +61,9 @@ public class RootElement extends CharacterElement
 	{
 		if(amc_data_order.length == 6)
 		{
+			if(this.amc_data_order == null)
+				this.amc_data_order = new AcclaimData.OperationOnAxis[6];
+			
 			for(int i = 0; i < amc_data_order.length; i++)
 				this.amc_data_order[i] = amc_data_order[i];
 		}

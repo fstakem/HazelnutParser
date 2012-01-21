@@ -99,7 +99,7 @@ public class AmcParser extends Parser
 					position.add(Float.valueOf(tokens[j]));
 				
 				if(!position.isEmpty())
-					frame.bone_positions.put(tokens[0], position);
+					frame.bone_orientation.put(tokens[0], position);
 				else
 					throw new ParseException("The Amc frame has no values for the bone.", 0);
 			}
@@ -108,7 +108,7 @@ public class AmcParser extends Parser
 		if( !AmcParser.checkForAllBonesInFrame(frame, bones) )
 			throw new ParseException("The Amc frame does not contain all of the bones from a previous frame.", 0);
 		
-		logger.info("AmcParser.parseFrame(): Parsed frame {} and it has {} bones.", frame.number, frame.bone_positions.size());
+		logger.info("AmcParser.parseFrame(): Parsed frame {} and it has {} bones.", frame.number, frame.bone_orientation.size());
 		logger.debug("AmcParser.parseFrame(): Exiting method.");
 		return frame;
 	}
@@ -145,7 +145,7 @@ public class AmcParser extends Parser
 		 
 		while(iter.hasNext())
 		{
-			if( !frame.bone_positions.keySet().contains(iter.next()) )
+			if( !frame.bone_orientation.keySet().contains(iter.next()) )
 			{
 				logger.debug("AmcParser.checkForAllBonesInFrame(): Exiting method.");
 				return false;

@@ -81,6 +81,7 @@ public class AcclaimImporterTest
 		} 
     	catch (ParseException e) 
     	{
+    		e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     }
@@ -101,6 +102,7 @@ public class AcclaimImporterTest
 		} 
 		catch (ParseException e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     }

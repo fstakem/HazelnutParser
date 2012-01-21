@@ -52,29 +52,9 @@ public class MapperTest
 		  															   AcclaimData.OperationOnAxis.RY, 
 		  															   AcclaimData.OperationOnAxis.RZ };
 	public static final float[] asf_bone_limits = { 45.0f, 180.0f };
-
-
-
-	// Constants
-	
-	//public static final String[] asf_root_order = { "TX", "TY", "TZ", "RX", "RY", "RZ" };
-	//public static final String asf_root_axis = "XYZ";
-	//public static final String[] asf_root_position = { "1.0f", "2.0f", "3.0f" };
-	//public static final String[] asf_root_orientation = { "4.0f", "5.0f", "6.0f" };
-	//public static final String asf_root_name = "root";
-	//public static final String[] asf_bone_names = { "lhipjoint", "rhipjoint", "lfemur" };
-	//public static final int[][] asf_bone_hierarchy = { {0, 1}, {0, 2} };
-	//public static final int asf_bone_starting_id = 1;
-	//public static final float[] asf_bone_direction = { 0.5f, 1.25f, 2.25f };
-	//public static final float asf_bone_length = 1.5f;
-	//public static final String[] asf_bone_dof = { "RX", "RY", "RZ" };
-	//private static final AcclaimData.Axis[] asf_bone_axis_keys = { AcclaimData.Axis.X,
-																   //AcclaimData.Axis.Y,
-																   //AcclaimData.Axis.Z };
-	//private static final float[] asf_bone_axis_values = { 10.0f, 20.0f, 30.0f };
 	
 	public static final int amc_number_of_frames = 2;
-	public static final float[] amc_bone_positions = { 0.25f, 0.5f, 0.75f };
+	public static final float[] amc_bone_orientation = { 0.25f, 0.5f, 0.75f };
 	
 	// Variables
 	
@@ -176,9 +156,9 @@ public class MapperTest
     		for(int j = 0; j < MapperTest.asf_bone_names.length; j++)
     		{
     			ArrayList<Float> values = new ArrayList<Float>();
-    			for(int k = 0; k < MapperTest.amc_bone_positions.length; k++)
-    				values.add(MapperTest.amc_bone_positions[k] * j+1 * frame.number);
-    			frame.bone_positions.put(MapperTest.asf_bone_names[j], values);
+    			for(int k = 0; k < MapperTest.amc_bone_orientation.length; k++)
+    				values.add(MapperTest.amc_bone_orientation[k] * (j+1) * frame.number);
+    			frame.bone_orientation.put(MapperTest.asf_bone_names[j], values);
     		}
     		amc_data.frames.add(frame);
     	}

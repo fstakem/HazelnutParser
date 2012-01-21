@@ -97,6 +97,7 @@ public class AmcParserTest
 		} 
     	catch (ParseException e) 
     	{
+    		e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	
@@ -120,13 +121,13 @@ public class AmcParserTest
     private void compareFrames(AcclaimFrame frame, AcclaimFrame other_frame, int multiplier)
     {
     	float difference = 0.01f;
-    	for(Map.Entry<String, List<Float>> entry : frame.bone_positions.entrySet())
+    	for(Map.Entry<String, List<Float>> entry : frame.bone_orientation.entrySet())
 		{
 			String key = entry.getKey();
-			if(other_frame.bone_positions.containsKey(key))
+			if(other_frame.bone_orientation.containsKey(key))
 			{
 				List<Float> frame_values = entry.getValue();
-				List<Float> other_frame_values = other_frame.bone_positions.get(key);
+				List<Float> other_frame_values = other_frame.bone_orientation.get(key);
 				for(int j = 0; j < frame_values.size(); j++)
 				{
 					if(frame_values.get(j) * multiplier - other_frame_values.get(j) < -difference || 

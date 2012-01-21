@@ -25,15 +25,15 @@ public class AmcMapper
 			logger.info("AmcMapper.addStateDataToBones(): Adding frame {}.", i+1);
 			
 			AcclaimFrame frame = amc_data.frames.get(i);
-			for(Entry<String, List<Float>> entry : frame.bone_positions.entrySet())
+			for(Entry<String, List<Float>> entry : frame.bone_orientation.entrySet())
 			{
 				CharacterElement character_element = root.findCharacterElement(entry.getKey());
-				character_element.addState(new CharacterElementState(entry.getValue()));
-				logger.info("AmcMapper.addStateDataToBones(): Add state to {}.", character_element.getName());
+				CharacterElementState new_state = new CharacterElementState(entry.getValue());
+				logger.info("AmcMapper.addStateDataToBones(): Add state {} to {}.", new_state.toString(), character_element.getName());
+				character_element.getStates().add(new_state);
 			}
 		}
 		
 		logger.debug("AmcMapper.addStateDataToBones(): Exiting method.");
 	}
-
 }

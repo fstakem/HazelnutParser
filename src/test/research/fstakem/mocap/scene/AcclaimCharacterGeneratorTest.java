@@ -87,6 +87,7 @@ public class AcclaimCharacterGeneratorTest
 		} 
     	catch (Exception e) 
     	{
+    		e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	

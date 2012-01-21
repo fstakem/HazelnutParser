@@ -89,6 +89,7 @@ public class AsfMapperTest extends MapperTest
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
 		
@@ -126,6 +127,7 @@ public class AsfMapperTest extends MapperTest
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
     	
@@ -196,6 +198,7 @@ public class AsfMapperTest extends MapperTest
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
 		
@@ -237,17 +240,6 @@ public class AsfMapperTest extends MapperTest
     	// Test length
     	Assert.assertEquals("Bone length created does not match initial length.", 
     						asf_bone.length, bone.getLength());
-    	
-    	
-    	
-    	
-    	//public static final Vector3f asf_bone_axis_values = new Vector3f(1.0f, 2.0f, 3.0f); 
-    	//public static final AcclaimData.Axis[] asf_bone_axis_order = { AcclaimData.Axis.X,
-    	//														       AcclaimData.Axis.Y,
-    	//														       AcclaimData.Axis.Z };
-    	//public static final AcclaimData.OperationOnAxis[] asf_bone_dof = { AcclaimData.OperationOnAxis.RX, 
-    	//	  															   AcclaimData.OperationOnAxis.RY, 
-    	//	  															   AcclaimData.OperationOnAxis.RZ };
     	
     	// Test orientation 
     	Assert.assertEquals("Bone orientation created does not match initial orientation.", 

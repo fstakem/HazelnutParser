@@ -10,12 +10,12 @@ public class AcclaimFrame
 	
 	// Variables
 	public int number;
-	public HashMap<String, List<Float>> bone_positions;
+	public HashMap<String, List<Float>> bone_orientation;
 	
 	public AcclaimFrame()
 	{
 		this.number = -1;
-		this.bone_positions = new HashMap<String, List<Float>>();
+		this.bone_orientation = new HashMap<String, List<Float>>();
 	}
 	
 	public String toString()
@@ -23,7 +23,7 @@ public class AcclaimFrame
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.number);
 		sb.append("\n");
-		for(Entry<String, List<Float>> entry : this.bone_positions.entrySet())
+		for(Entry<String, List<Float>> entry : this.bone_orientation.entrySet())
 		{
 			sb.append(entry.getKey() + "\t");
 			List<Float> bone_values = entry.getValue();

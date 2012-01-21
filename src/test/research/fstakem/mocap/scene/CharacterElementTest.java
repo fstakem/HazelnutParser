@@ -99,6 +99,7 @@ public class CharacterElementTest
 			} 
     		catch (Exception e) 
     		{
+    			e.printStackTrace();
 				Assert.fail(e.getMessage());
 			}
     		
@@ -125,6 +126,7 @@ public class CharacterElementTest
 			} 
     		catch (Exception e) 
     		{
+    			e.printStackTrace();
 				Assert.fail(e.getMessage());
 			}
     		
@@ -149,10 +151,10 @@ public class CharacterElementTest
     	states.add(state_a);
     	states.add(state_b);
     	this.character_element.setStates(states);
-    	this.character_element.addState(state_c);
-    	this.character_element.addStateAt(1, state_d);
+    	this.character_element.getStates().add(state_c);
+    	this.character_element.getStates().add(state_d);
     	
-    	logger.info("Restting the current state and testing.");
+    	logger.info("Resetting the current state and testing.");
     	this.character_element.resetCurrentState();
     	CharacterElementState state = this.character_element.getCurrentState();
 		this.compareStates(state, state_a);
@@ -160,18 +162,18 @@ public class CharacterElementTest
 		
 		logger.info("Incrementing and decrementing the current state and testing.");
 		state = this.character_element.getCurrentState();
-		this.compareStates(state, state_d);
+		this.compareStates(state, state_b);
 		this.character_element.incrementState();
 		this.character_element.incrementState();
 		this.character_element.decrementState();
 		
 		state = this.character_element.getCurrentState();
-		this.compareStates(state, state_b);
+		this.compareStates(state, state_c);
 		this.character_element.setCurrentState(this.character_element.getNumberOfStates()-1);
 		
 		logger.info("Setting the current state and testing.");
 		state = this.character_element.getCurrentState();
-		this.compareStates(state, state_c);
+		this.compareStates(state, state_d);
     }
     
     @Test

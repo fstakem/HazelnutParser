@@ -2,39 +2,76 @@ package test.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.vecmath.Vector3f;
 
 import main.research.fstakem.mocap.parser.AcclaimBone;
 import main.research.fstakem.mocap.parser.AcclaimData;
 import main.research.fstakem.mocap.parser.AcclaimFrame;
+import main.research.fstakem.mocap.parser.AcclaimRoot;
 import main.research.fstakem.mocap.parser.AmcData;
 import main.research.fstakem.mocap.parser.AsfData;
-import main.research.fstakem.mocap.scene.CharacterElement;
+import main.research.fstakem.mocap.parser.AsfParser;
 
 public class MapperTest 
 {
 	// Constants
+	public static final String[] asf_section_keywords = { AsfParser.VERSION_KEYWORD, AsfParser.NAME_KEYWORD, AsfParser.UNITS_KEYWORD,
+													  	  AsfParser.DOCUMENTATION_KEYWORD, AsfParser.ROOT_KEYWORD, AsfParser.BONES_KEYWORD, 
+													  	  AsfParser.HIERARCHY_KEYWORD };
 	public static final String asf_version = "1.10";
 	public static final String asf_name = "VICON";
 	public static final String asf_unit_mass = "1.0";
 	public static final String asf_unit_length = "0.45";
 	public static final String asf_unit_angle = "deg";
-	public static final String[] asf_root_order = { "TX", "TY", "TZ", "RX", "RY", "RZ" };
-	public static final String asf_root_axis = "XYZ";
-	public static final String[] asf_root_position = { "1.0f", "2.0f", "3.0f" };
-	public static final String[] asf_root_orientation = { "4.0f", "5.0f", "6.0f" };
+	public static final String asf_documentation = "This is a test of parsing the asf file.";
 	public static final String asf_root_name = "root";
-	public static final String[] asf_bone_names = { "lhipjoint", "rhipjoint", "lfemur" };
-	public static final int[][] asf_bone_hierarchy = { {0, 1}, {0, 2} };
+	public static final AcclaimData.OperationOnAxis[] asf_root_order = { AcclaimData.OperationOnAxis.TX,
+																	  	 AcclaimData.OperationOnAxis.TY, 
+																	  	 AcclaimData.OperationOnAxis.TZ, 
+																	  	 AcclaimData.OperationOnAxis.RX, 
+																	  	 AcclaimData.OperationOnAxis.RY, 
+																	  	 AcclaimData.OperationOnAxis.RZ };
+	public static final AcclaimData.Axis[] asf_root_axis = { AcclaimData.Axis.X, 
+														  	 AcclaimData.Axis.Y, 
+														  	 AcclaimData.Axis.Z };
+	public static final Vector3f asf_root_position = new Vector3f(0.0f, 0.0f, 0.0f);
+	public static final Vector3f asf_root_orientation = new Vector3f(0.0f, 0.0f, 0.0f);
 	public static final int asf_bone_starting_id = 1;
-	public static final float[] asf_bone_direction = { 0.5f, 1.25f, 2.25f };
+	public static final int[][] asf_bone_hierarchy = { {0, 1}, {0, 2} };
+	public static final String[] asf_bone_names = { "lhipjoint", "rhipjoint", "lfemur" };
+	public static final Vector3f asf_bone_direction = new Vector3f(0.5f, 1.25f, 2.25f);
 	public static final float asf_bone_length = 1.5f;
-	public static final String[] asf_bone_dof = { "RX", "RY", "RZ" };
-	private static final AcclaimData.Axis[] asf_bone_axis_keys = { AcclaimData.Axis.X,
-																   AcclaimData.Axis.Y,
-																   AcclaimData.Axis.Z };
-	private static final float[] asf_bone_axis_values = { 10.0f, 20.0f, 30.0f };
+	public static final Vector3f asf_bone_axis_values = new Vector3f(1.0f, 2.0f, 3.0f); 
+	public static final AcclaimData.Axis[] asf_bone_axis_order = { AcclaimData.Axis.X,
+															       AcclaimData.Axis.Y,
+															       AcclaimData.Axis.Z };
+	public static final AcclaimData.OperationOnAxis[] asf_bone_dof = { AcclaimData.OperationOnAxis.RX, 
+		  															   AcclaimData.OperationOnAxis.RY, 
+		  															   AcclaimData.OperationOnAxis.RZ };
 	public static final float[] asf_bone_limits = { 45.0f, 180.0f };
+
+
+
+	// Constants
+	
+	//public static final String[] asf_root_order = { "TX", "TY", "TZ", "RX", "RY", "RZ" };
+	//public static final String asf_root_axis = "XYZ";
+	//public static final String[] asf_root_position = { "1.0f", "2.0f", "3.0f" };
+	//public static final String[] asf_root_orientation = { "4.0f", "5.0f", "6.0f" };
+	//public static final String asf_root_name = "root";
+	//public static final String[] asf_bone_names = { "lhipjoint", "rhipjoint", "lfemur" };
+	//public static final int[][] asf_bone_hierarchy = { {0, 1}, {0, 2} };
+	//public static final int asf_bone_starting_id = 1;
+	//public static final float[] asf_bone_direction = { 0.5f, 1.25f, 2.25f };
+	//public static final float asf_bone_length = 1.5f;
+	//public static final String[] asf_bone_dof = { "RX", "RY", "RZ" };
+	//private static final AcclaimData.Axis[] asf_bone_axis_keys = { AcclaimData.Axis.X,
+																   //AcclaimData.Axis.Y,
+																   //AcclaimData.Axis.Z };
+	//private static final float[] asf_bone_axis_values = { 10.0f, 20.0f, 30.0f };
 	
 	public static final int amc_number_of_frames = 2;
 	public static final float[] amc_bone_positions = { 0.25f, 0.5f, 0.75f };
@@ -47,16 +84,55 @@ public class MapperTest
     	asf_data.version = MapperTest.asf_version;
     	asf_data.name = MapperTest.asf_name;
     	asf_data.units = MapperTest.createAsfUnits();
+    	asf_data.documentation = MapperTest.createAsfDocumentation();
     	asf_data.root = MapperTest.createAsfRoot();
     	asf_data.bones = MapperTest.createAsfBones();
     	asf_data.hierarchy = MapperTest.createElementHierachy();
     	
     	return asf_data;
     }
-	
-    public static HashMap<String, ArrayList<String>> createElementHierachy()
+    
+    private static Map<String, String> createAsfUnits()
     {
-    	HashMap<String, ArrayList<String>> hierarchy = new HashMap<String, ArrayList<String>>();
+    	Map<String, String> units = new HashMap<String, String>();
+    	units.put("mass", MapperTest.asf_unit_mass);
+    	units.put("length", MapperTest.asf_unit_length);
+    	units.put("angle", MapperTest.asf_unit_angle);
+    	
+    	return units;
+    }
+    
+    public static List<String> createAsfDocumentation()
+    {
+    	List<String> documentation = new ArrayList<String>();
+    	documentation.add(MapperTest.asf_documentation);
+    	
+    	return documentation;
+    }
+    
+    public static AcclaimRoot createAsfRoot()
+    {
+    	AcclaimRoot acclaim_root = new AcclaimRoot();
+    	acclaim_root.amc_data_order = MapperTest.asf_root_order;
+    	acclaim_root.orientation_order = MapperTest.asf_root_axis;
+    	acclaim_root.position = MapperTest.asf_root_position;
+    	acclaim_root.orientation = MapperTest.asf_root_orientation;
+    	
+    	return acclaim_root;
+    }
+    
+    public static List<AcclaimBone> createAsfBones()
+    {
+    	List<AcclaimBone> bones = new ArrayList<AcclaimBone>();
+    	for(int i = 0; i < MapperTest.asf_bone_names.length; i++)
+    		bones.add(MapperTest.addDetailsToBone(MapperTest.asf_bone_starting_id+i, MapperTest.asf_bone_names[i]));
+    	
+    	return bones;
+    }
+	
+    public static Map<String, List<String>> createElementHierachy()
+    {
+    	Map<String, List<String>> hierarchy = new HashMap<String, List<String>>();
     	String key = "";
     	ArrayList<String> values;
     	int start_index = 0;
@@ -87,46 +163,7 @@ public class MapperTest
     	
     	return hierarchy;
     }
-	   
-    public static HashMap<String, ArrayList<String>> createAsfRoot()
-    {
-    	HashMap<String, ArrayList<String>> root = new HashMap<String, ArrayList<String>>();
-    	
-    	String key = "order";
-    	ArrayList<String> values = new ArrayList<String>();
-    	for(String v : MapperTest.asf_root_order)
-    		values.add(v);
-    	root.put(key, values);
-    	
-    	key = "axis";
-    	values = new ArrayList<String>();
-    	values.add(MapperTest.asf_root_axis);
-    	root.put(key, values);
-    	
-       	key = "position";
-    	values = new ArrayList<String>();
-    	for(String v : MapperTest.asf_root_position)
-    		values.add(v);
-    	root.put(key, values);
-    	
-       	key = "orientation";
-    	values = new ArrayList<String>();
-    	for(String v: MapperTest.asf_root_orientation)
-    		values.add(v);
-    	root.put(key, values);
-    	
-    	return root;
-    }
-    
-    public static ArrayList<AcclaimBone> createAsfBones()
-    {
-    	ArrayList<AcclaimBone> bones = new ArrayList<AcclaimBone>();
-    	for(int i = 0; i < MapperTest.asf_bone_names.length; i++)
-    		bones.add(MapperTest.addDetailsToBone(MapperTest.asf_bone_starting_id+i, MapperTest.asf_bone_names[i]));
-    	
-    	return bones;
-    }
-    
+	      
     public static AmcData createAmcData()
     {
     	AmcData amc_data = new AmcData();
@@ -148,42 +185,27 @@ public class MapperTest
     	
     	return amc_data;
     }
-    
-    private static HashMap<String, String> createAsfUnits()
-    {
-    	HashMap<String, String> units = new HashMap<String, String>();
-    	units.put("mass", MapperTest.asf_unit_mass);
-    	units.put("length", MapperTest.asf_unit_length);
-    	units.put("angle", MapperTest.asf_unit_angle);
-    	
-    	return units;
-    }
-    
+       
     private static AcclaimBone addDetailsToBone(int id, String name)
     {
     	AcclaimBone bone = new AcclaimBone();
     	int multiplier = id;
        	bone.id = id;
-    	bone.name = name;
-    	
-    	ArrayList<Float> direction = new ArrayList<Float>();
-    	for(float v : MapperTest.asf_bone_direction)
-    		direction.add(v * multiplier);
-    	bone.direction = direction;
+    	bone.name = name;	
+    	bone.direction = new Vector3f(MapperTest.asf_bone_direction.x * multiplier, 
+    								  MapperTest.asf_bone_direction.y * multiplier,
+    								  MapperTest.asf_bone_direction.z * multiplier);
     	bone.length = MapperTest.asf_bone_length * multiplier;
+    	bone.orientation = new Vector3f(MapperTest.asf_bone_axis_values.x * multiplier,
+    									MapperTest.asf_bone_axis_values.y * multiplier,
+    									MapperTest.asf_bone_axis_values.z * multiplier);
     	
-    	//ArrayList<Float> axis = new ArrayList<Float>();
-    	LinkedHashMap<AcclaimData.Axis, Float> axis = new LinkedHashMap<AcclaimData.Axis, Float>();
-    	for(int i = 0; i < MapperTest.asf_bone_axis_keys.length; i++)
-    		axis.put(MapperTest.asf_bone_axis_keys[i], MapperTest.asf_bone_axis_values[i]);
-    	bone.axis = axis;
-    
-    	ArrayList<String> dof = new ArrayList<String>();
-    	for(String v : MapperTest.asf_bone_dof)
-    		dof.add(v);
-    	bone.dof = dof;
+    	List<AcclaimData.OperationOnAxis> asf_bone_dof = new ArrayList<AcclaimData.OperationOnAxis>();
+    	for(AcclaimData.OperationOnAxis dof : MapperTest.asf_bone_dof)
+    		asf_bone_dof.add(dof);
+    	bone.dof = asf_bone_dof;
     	
-    	ArrayList< ArrayList<Float>> limits = new ArrayList< ArrayList<Float>>();
+    	List< List<Float>> limits = new ArrayList<List<Float>>();
     	for(int i = 0; i < 3; i++)
     	{
     		ArrayList<Float> l = new ArrayList<Float>();

@@ -1,7 +1,8 @@
 package test.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.vecmath.Vector3f;
 
@@ -9,6 +10,7 @@ import junit.framework.Assert;
 
 import main.research.fstakem.mocap.parser.AcclaimBone;
 import main.research.fstakem.mocap.parser.AcclaimData;
+import main.research.fstakem.mocap.parser.AcclaimRoot;
 import main.research.fstakem.mocap.scene.AsfMapper;
 import main.research.fstakem.mocap.scene.Bone;
 import main.research.fstakem.mocap.scene.CharacterElement;
@@ -79,7 +81,7 @@ public class AsfMapperTest extends MapperTest
     {
     	logger.debug("Test to make sure the asf hierarchy is created properly.");
     	
-    	HashMap<String, ArrayList<String>> hierarchy = MapperTest.createElementHierachy();
+    	Map<String, List<String>> hierarchy = MapperTest.createElementHierachy();
     	CharacterElement root = null;
 		try 
 		{
@@ -90,15 +92,15 @@ public class AsfMapperTest extends MapperTest
 			Assert.fail(e.getMessage());
 		}
 		
-		ArrayList<CharacterElement> all_elements = new ArrayList<CharacterElement>();
+		List<CharacterElement> all_elements = new ArrayList<CharacterElement>();
 		all_elements.add(root);
 		all_elements.addAll(root.getAllSubElements());
     	for(CharacterElement element : all_elements)
     	{
-    		ArrayList<String> children_names = hierarchy.get(element.getName());
+    		List<String> children_names = hierarchy.get(element.getName());
     		if(children_names != null)
     		{
-    			ArrayList<CharacterElement> children = element.getChildren();
+    			List<CharacterElement> children = element.getChildren();
     			for(CharacterElement child_element : children)
     			{
     				logger.info("Testing that \'{}\' has child \'{}\'.", element.getName(), child_element.getName());
@@ -113,9 +115,9 @@ public class AsfMapperTest extends MapperTest
     {
     	logger.debug("Test to make sure the asf root is created properly.");
     	
-    	HashMap<String, ArrayList<String>> hierarchy = MapperTest.createElementHierachy();
+    	Map<String, List<String>> hierarchy = MapperTest.createElementHierachy();
     	RootElement root = null;
-    	HashMap<String, ArrayList<String>> asf_root = null;
+    	AcclaimRoot asf_root = null;
 		try 
 		{
 			root = AsfMapper.createCharacterElementHierarchy(hierarchy);
@@ -132,46 +134,46 @@ public class AsfMapperTest extends MapperTest
     	Assert.assertEquals("Root element name created does not match initial name.", 
     						MapperTest.asf_root_name, root.getName());
     	
-    	// Test dof
-    	logger.info("Testing the root element dof.");
-    	ArrayList<AcclaimData.OperationOnAxis> order = root.getOrder();
-    	for(int i = 0; i < order.size(); i++)
-    		Assert.assertEquals("Root element dof created does not match initial dof.", 
-    							AcclaimData.getOperationOnAxisFromString(MapperTest.asf_root_order[i]), 
-    							order.get(i));
+    	// Test amc data order
+    	logger.info("Testing the root ordering of the amc data.");
+    	AcclaimData.OperationOnAxis[] amc_data_order = root.getAmcDataOrder();
+    	for(int i = 0; i < amc_data_order.length; i++)
+    		Assert.assertEquals("Root element order of amc data created does not match order of amc data.", 
+    							MapperTest.asf_root_order[i], 
+    							amc_data_order[i]);
     	
-    	// Test axis
-    	logger.info("Testing the root element axis.");
-    	ArrayList<AcclaimData.Axis> axis = root.getAxis();
-    	for(int i = 0; i < axis.size(); i++)
-    		Assert.assertEquals("Root element axis dof created does not match initial axis.", 
-    							AcclaimData.getAxisFromString(MapperTest.asf_root_axis.substring(i, i+1)), 
-    							axis.get(i));
+    	// Test orientation order
+    	logger.info("Testing the root orientation order.");
+    	AcclaimData.Axis[] orientation_order = root.getOrientationOrder();
+    	for(int i = 0; i < orientation_order.length; i++)
+    		Assert.assertEquals("Root element orientation order created does not match initial orientation order.", 
+    							MapperTest.asf_root_axis[i], 
+    							orientation_order[i]);
 
     	// Test position
     	logger.info("Testing the root element position.");
     	Vector3f position = root.getStartPosition();
     	Assert.assertEquals("Root element position created does not match initial position.", 
-    						Float.valueOf(MapperTest.asf_root_position[0]), 
+    						MapperTest.asf_root_position.x, 
     						position.x);
     	Assert.assertEquals("Root element position created does not match initial position.", 
-    						Float.valueOf(MapperTest.asf_root_position[1]), 
+    						MapperTest.asf_root_position.y, 
     						position.y);
     	Assert.assertEquals("Root element position created does not match initial position.", 
-    						Float.valueOf(MapperTest.asf_root_position[2]), 
+    						MapperTest.asf_root_position.z, 
     						position.z);
     	
     	// Test orientation
     	logger.info("Testing the root element orientation.");
     	Vector3f orientation = root.getOrientation();
     	Assert.assertEquals("Root element orientation created does not match initial orientation.", 
-    						Float.valueOf(MapperTest.asf_root_orientation[0]), 
+    						MapperTest.asf_root_orientation.x, 
     						orientation.x);
     	Assert.assertEquals("Root element orientation created does not match initial orientation.", 
-    						Float.valueOf(MapperTest.asf_root_orientation[1]), 
+    						MapperTest.asf_root_orientation.y, 
     						orientation.y);
     	Assert.assertEquals("Root element orientation created does not match initial orientation.", 
-    						Float.valueOf(MapperTest.asf_root_orientation[2]), 
+    						MapperTest.asf_root_orientation.z, 
     						orientation.z);
     }
     
@@ -180,10 +182,10 @@ public class AsfMapperTest extends MapperTest
     {
     	logger.debug("Test to make sure the asf bones are created properly.");
     	
-    	HashMap<String, ArrayList<String>> hierarchy = MapperTest.createElementHierachy();
+    	Map<String, List<String>> hierarchy = MapperTest.createElementHierachy();
     	RootElement root = null;
-    	HashMap<String, ArrayList<String>> asf_root = null;
-    	ArrayList<AcclaimBone> asf_bones = null;
+    	AcclaimRoot asf_root = null;
+    	List<AcclaimBone> asf_bones = null;
 		try 
 		{
 			root = AsfMapper.createCharacterElementHierarchy(hierarchy);
@@ -197,7 +199,7 @@ public class AsfMapperTest extends MapperTest
 			Assert.fail(e.getMessage());
 		}
 		
-    	ArrayList<CharacterElement> bones = root.getAllSubElements();
+    	List<CharacterElement> bones = root.getAllSubElements();
     	for(AcclaimBone acclaim_bone : asf_bones)
     	{
     		int bone_index = -1;
@@ -224,27 +226,46 @@ public class AsfMapperTest extends MapperTest
     	// Test id
     	Assert.assertEquals("Bone id created does not match initial id.", asf_bone.id, bone.getId());
     	
-    	// Test orientation
+    	// Test direction
     	Assert.assertEquals("Bone direction created does not match initial direction.", 
-    						asf_bone.direction.get(0), bone.getOrientation().x);
+    						asf_bone.direction.x, bone.getDirection().x);
     	Assert.assertEquals("Bone direction created does not match initial direction.", 
-    						asf_bone.direction.get(1), bone.getOrientation().y);
+    						asf_bone.direction.y, bone.getDirection().y);
     	Assert.assertEquals("Bone direction created does not match initial direction.", 
-    						asf_bone.direction.get(2), bone.getOrientation().z);
+    						asf_bone.direction.z, bone.getDirection().z);
     	
     	// Test length
     	Assert.assertEquals("Bone length created does not match initial length.", 
     						asf_bone.length, bone.getLength());
     	
-    	// Test axis
-    	for(int i = 0; i < asf_bone.axis.size(); i++)
-    		Assert.assertEquals("Bone axis created does not match initial axis.", 
-    							asf_bone.axis.get(i), bone.getAxis().get(i));
     	
+    	
+    	
+    	//public static final Vector3f asf_bone_axis_values = new Vector3f(1.0f, 2.0f, 3.0f); 
+    	//public static final AcclaimData.Axis[] asf_bone_axis_order = { AcclaimData.Axis.X,
+    	//														       AcclaimData.Axis.Y,
+    	//														       AcclaimData.Axis.Z };
+    	//public static final AcclaimData.OperationOnAxis[] asf_bone_dof = { AcclaimData.OperationOnAxis.RX, 
+    	//	  															   AcclaimData.OperationOnAxis.RY, 
+    	//	  															   AcclaimData.OperationOnAxis.RZ };
+    	
+    	// Test orientation 
+    	Assert.assertEquals("Bone orientation created does not match initial orientation.", 
+							asf_bone.orientation.x, bone.getOrientation().x);
+    	Assert.assertEquals("Bone orientation created does not match initial orientation.", 
+							asf_bone.orientation.y, bone.getOrientation().y);
+    	Assert.assertEquals("Bone orientation created does not match initial orientation.", 
+							asf_bone.orientation.z, bone.getOrientation().z);
+    	
+    	// Test orientation order
+    	for(int i = 0; i < asf_bone.orientation_order.length; i++)
+    		Assert.assertEquals("Bone orientation order created does not match initial orientation order.", 
+								asf_bone.orientation_order[i], bone.getOrientationOrder()[i]);
+		
     	// Test dof
     	for(int i = 0; i < asf_bone.dof.size(); i++)
     		Assert.assertEquals("Bone dof created does not match initial dof.", 
-    							AcclaimData.getOperationOnAxisFromString(asf_bone.dof.get(i)), bone.getDof().get(i));
+								asf_bone.dof.get(i), bone.getDof().get(i));
     	
     	// Test limits
     	for(int i = 0; i < asf_bone.limits.size(); i++)

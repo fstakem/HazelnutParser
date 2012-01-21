@@ -1,6 +1,7 @@
 package test.research.fstakem.mocap.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -187,7 +188,7 @@ public class CharacterElementTest
     	Assert.assertEquals("The number of child nodes stated does not match the actual number.", 1, this.character_element.getNumberOfChildren());
     	
     	logger.info("Testing the child elements to make sure they have the proper nesting.");
-    	ArrayList<CharacterElement> character_elements = this.character_element.getChildren();
+    	List<CharacterElement> character_elements = this.character_element.getChildren();
     	CharacterElement child = character_elements.get(0);
     	if(!child.getName().equals(nested_names[0]))
     		Assert.fail("Parsed children do not match the initial children.");
@@ -202,9 +203,9 @@ public class CharacterElementTest
     	logger.debug("Test to make sure nested children can be flattened into an array.");
     	
     	String[] names = { "A", "B", "C" };
-    	ArrayList<CharacterElement> elements = this.createListOfCharacterElements(names);
+    	List<CharacterElement> elements = this.createListOfCharacterElements(names);
     	this.character_element.addChild(this.createNestedCharacterElements(names));
-    	ArrayList<CharacterElement> nested_elements = this.character_element.getAllSubElements();
+    	List<CharacterElement> nested_elements = this.character_element.getAllSubElements();
     	
     	for(CharacterElement element : elements)
     	{
@@ -281,9 +282,9 @@ public class CharacterElementTest
     	return first_character_element;
     }
     
-    private ArrayList<CharacterElement> createListOfCharacterElements(String[] names)
+    private List<CharacterElement> createListOfCharacterElements(String[] names)
     {
-    	ArrayList<CharacterElement> elements = new ArrayList<CharacterElement>();
+    	List<CharacterElement> elements = new ArrayList<CharacterElement>();
     	for(String name : names)
     		elements.add(new CharacterElement(name));
     	

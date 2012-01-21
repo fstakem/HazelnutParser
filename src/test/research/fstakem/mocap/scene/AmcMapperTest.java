@@ -1,11 +1,12 @@
 package test.research.fstakem.mocap.scene;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
 import main.research.fstakem.mocap.parser.AcclaimBone;
+import main.research.fstakem.mocap.parser.AcclaimRoot;
 import main.research.fstakem.mocap.parser.AmcData;
 import main.research.fstakem.mocap.scene.AmcMapper;
 import main.research.fstakem.mocap.scene.AsfMapper;
@@ -81,10 +82,10 @@ public class AmcMapperTest extends MapperTest
     {  
     	logger.debug("Test to make sure the amc state data is created properly.");  
     	
-    	HashMap<String, ArrayList<String>> hierarchy = MapperTest.createElementHierachy();
+    	Map<String, List<String>> hierarchy = MapperTest.createElementHierachy();
     	RootElement root = null;
-    	HashMap<String, ArrayList<String>> asf_root = null;
-    	ArrayList<AcclaimBone> asf_bones = null;
+    	AcclaimRoot asf_root = null;
+    	List<AcclaimBone> asf_bones = null;
     	AmcData amc_data = MapperTest.createAmcData();
     	
 		try 
@@ -103,7 +104,7 @@ public class AmcMapperTest extends MapperTest
 		
 		// TODO
 		// Check the state of each element
-		ArrayList<CharacterElement> character_elements = root.getAllSubElements();
+		List<CharacterElement> character_elements = root.getAllSubElements();
 		for(int i = 0; i < character_elements.size(); i++)
 		{
 			CharacterElement element = character_elements.get(i);
